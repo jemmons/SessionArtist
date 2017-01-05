@@ -1,4 +1,5 @@
 import Foundation
+import Medea
 
 public protocol Endpoint {
   static var scheme: String {get}
@@ -19,35 +20,67 @@ public extension Endpoint {
   static var port: Int { return -1 }
   
   
-  func get(_ path: String, params: [URLQueryItem]? = nil) -> URLRequest {
+  func get(_ path: String, params: [URLQueryItem]? = nil, headers: [String: String] = [:]) -> URLRequest {
     let url = makeURL(scheme: Self.scheme, host: Self.host, port: Self.port, path: path, params: params)
-    return URLRequest(url: url)
+    return makeRequest(url, headers: headers)
   }
   
   
-  func post(_ path: String, params: [URLQueryItem]) -> URLRequest {
+  func post(_ path: String, params: [URLQueryItem], headers: [String: String] = [:]) -> URLRequest {
     let url = makeURL(scheme: Self.scheme, host: Self.host, port: Self.port, path: path)
-    var req = URLRequest(url: url)
+    var req = makeRequest(url, headers: headers)
     req.httpMethod = "POST"
+    // If an explicit content type has been passed in, we don't want to overwrite it.
+    if headers["Content-Type"] == nil {
+      req.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+    }
     req.httpBody = makeQuery(from: params)?.data(using: .utf8)
     return req
   }
+
   
-  
-  func put(_ path: String, params: [URLQueryItem]) -> URLRequest {
+  func post(_ path: String, json: JSONObject, headers: [String: String] = [:]) throws -> URLRequest {
     let url = makeURL(scheme: Self.scheme, host: Self.host, port: Self.port, path: path)
-    var req = URLRequest(url: url)
+    var req = makeRequest(url, headers: headers)
+    req.httpMethod = "POST"
+    // If an explicit content type has been passed in, we don't want to overwrite it.
+    if headers["Content-Type"] == nil {
+      req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    }
+    req.httpBody = try JSONHelper.data(from: json)
+    return req
+  }
+
+  
+  func put(_ path: String, params: [URLQueryItem], headers: [String: String] = [:]) -> URLRequest {
+    let url = makeURL(scheme: Self.scheme, host: Self.host, port: Self.port, path: path)
+    var req = makeRequest(url, headers: headers)
     req.httpMethod = "PUT"
-    //omitted from PUT for some reason.
-    req.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+    // If an explicit content type has been passed in, we don't want to overwrite it.
+    if headers["Content-Type"] == nil {
+      req.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+    }
     req.httpBody = makeQuery(from: params)?.data(using: .utf8)
     return req
   }
   
   
-  func delete(_ path: String) -> URLRequest {
+  func put(_ path: String, json: JSONObject, headers: [String: String] = [:]) throws -> URLRequest {
     let url = makeURL(scheme: Self.scheme, host: Self.host, port: Self.port, path: path)
-    var req = URLRequest(url: url)
+    var req = makeRequest(url, headers: headers)
+    req.httpMethod = "PUT"
+    // If an explicit content type has been passed in, we don't want to overwrite it.
+    if headers["Content-Type"] == nil {
+      req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    }
+    req.httpBody = try JSONHelper.data(from: json)
+    return req
+  }
+  
+  
+  func delete(_ path: String, headers: [String: String] = [:]) -> URLRequest {
+    let url = makeURL(scheme: Self.scheme, host: Self.host, port: Self.port, path: path)
+    var req = makeRequest(url, headers: headers)
     req.httpMethod = "DELETE"
     return req
   }
@@ -57,6 +90,15 @@ public extension Endpoint {
     var comp = URLComponents()
     comp.queryItems = params
     return comp.query
+  }
+  
+  
+  private func makeRequest(_ url: URL, headers: [String: String]) -> URLRequest {
+    var req = URLRequest(url: url)
+    headers.forEach { field, value in
+      req.setValue(value, forHTTPHeaderField: field)
+    }
+    return req
   }
   
   

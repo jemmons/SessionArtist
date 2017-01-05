@@ -14,6 +14,7 @@
 		73407A9E1E15A6F100A121DF /* Perfidy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73407A9D1E15A6F100A121DF /* Perfidy.framework */; };
 		7344E2731E15B33C0043D88C /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7344E2721E15B33C0043D88C /* Endpoint.swift */; };
 		7344E2751E15B38E0043D88C /* EndpointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7344E2741E15B38E0043D88C /* EndpointTests.swift */; };
+		73E21DB41E1C887000FAA805 /* Medea.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73E21DB31E1C887000FAA805 /* Medea.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +39,8 @@
 		73407A9D1E15A6F100A121DF /* Perfidy.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Perfidy.framework; path = Carthage/Build/iOS/Perfidy.framework; sourceTree = "<group>"; };
 		7344E2721E15B33C0043D88C /* Endpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		7344E2741E15B38E0043D88C /* EndpointTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EndpointTests.swift; sourceTree = "<group>"; };
+		73E21DB11E1C880600FAA805 /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
+		73E21DB31E1C887000FAA805 /* Medea.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Medea.framework; path = Carthage/Build/iOS/Medea.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +48,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				73E21DB41E1C887000FAA805 /* Medea.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +67,7 @@
 		7322E42C1E12FD12003A6410 = {
 			isa = PBXGroup;
 			children = (
+				73E21DB11E1C880600FAA805 /* Cartfile */,
 				73407A9A1E15A67300A121DF /* Cartfile.private */,
 				7322E4381E12FD12003A6410 /* SessionArtist */,
 				7322E4431E12FD12003A6410 /* SessionArtistTests */,
@@ -104,6 +109,7 @@
 		73407A9C1E15A6F100A121DF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				73E21DB31E1C887000FAA805 /* Medea.framework */,
 				73407A9D1E15A6F100A121DF /* Perfidy.framework */,
 			);
 			name = Frameworks;
@@ -131,6 +137,7 @@
 				7322E4321E12FD12003A6410 /* Frameworks */,
 				7322E4331E12FD12003A6410 /* Headers */,
 				7322E4341E12FD12003A6410 /* Resources */,
+				73E21DB51E1C887600FAA805 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -216,6 +223,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		73E21DB51E1C887600FAA805 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/Medea.framework",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7322E4311E12FD12003A6410 /* Sources */ = {
@@ -356,6 +380,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = SessionArtist/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -377,6 +405,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = SessionArtist/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
