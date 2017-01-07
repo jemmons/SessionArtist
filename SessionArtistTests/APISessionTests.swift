@@ -124,7 +124,7 @@ class APISessionTests: XCTestCase {
   }
   
   
-  func testJSONResponse() {
+  func testJSONObjectResponse() {
     let shouldGetJSON = expectation(description: "get back response with JSON")
     let shouldFailParsing = expectation(description: "fail to parse invalid JSON")
     let shouldFailConnection = expectation(description: "fail to connect")
@@ -132,20 +132,20 @@ class APISessionTests: XCTestCase {
     FakeServer.runWith { server in
       server.add("/get", response: ["foo": "bar"])
       server.add("POST /post", response: "foobar")
-      API.perfidy.jsonTask(for: .getEndpoint) { res in
+      API.perfidy.jsonObjectTask(for: .getEndpoint) { res in
         if case .response(200, let j) = res {
           XCTAssertEqual(j as! [String: String], ["foo": "bar"])
           shouldGetJSON.fulfill()
         }
       }
       
-      API.perfidy.jsonTask(for: .postEndpoint) { res in
-        if case .failure(ResponseError.invalidJSONObject) = res {
+      API.perfidy.jsonObjectTask(for: .postEndpoint) { res in
+        if case .failure = res {
           shouldFailParsing.fulfill()
         }
       }
     
-      API.bogus.jsonTask(for: .nowhere) { res in
+      API.bogus.jsonObjectTask(for: .nowhere) { res in
         if case .failure(let e) = res {
           XCTAssertEqual((e as NSError).domain, NSURLErrorDomain)
           XCTAssertEqual((e as NSError).code, -1004)
@@ -156,6 +156,41 @@ class APISessionTests: XCTestCase {
       waitForExpectations(timeout: 1.0, handler: nil)
     }
   }
+  
+  
+  func testJSONArrayResponse() {
+    let shouldGetJSON = expectation(description: "gets response with JSON Array")
+    let shouldFailParsing = expectation(description: "fails to parse invalid JSON")
+    let shouldFailConnection = expectation(description: "fail to connect")
+    
+    FakeServer.runWith { server in
+      server.add("/get", response: try! Response(jsonArray: ["foo", "bar"]))
+      server.add("POST /post", response: "foobar")
+      API.perfidy.jsonArrayTask(for: .getEndpoint) { res in
+        if case .response(200, let j) = res {
+          XCTAssertEqual(j as! [String], ["foo", "bar"])
+          shouldGetJSON.fulfill()
+        }
+      }
+      
+      API.perfidy.jsonArrayTask(for: .postEndpoint) { res in
+        if case .failure = res {
+          shouldFailParsing.fulfill()
+        }
+      }
+      
+      API.bogus.jsonArrayTask(for: .nowhere) { res in
+        if case .failure(let e) = res {
+          XCTAssertEqual((e as NSError).domain, NSURLErrorDomain)
+          XCTAssertEqual((e as NSError).code, -1004)
+          shouldFailConnection.fulfill()
+        }
+      }
+      
+      waitForExpectations(timeout: 1.0, handler: nil)
+    }
+  }
+  
   
   
   func testRequests() {

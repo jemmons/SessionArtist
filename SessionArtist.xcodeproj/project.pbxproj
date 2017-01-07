@@ -137,7 +137,6 @@
 				7322E4321E12FD12003A6410 /* Frameworks */,
 				7322E4331E12FD12003A6410 /* Headers */,
 				7322E4341E12FD12003A6410 /* Resources */,
-				73E21DB51E1C887600FAA805 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -223,23 +222,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		73E21DB51E1C887600FAA805 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/Medea.framework",
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7322E4311E12FD12003A6410 /* Sources */ = {

@@ -1,4 +1,4 @@
 github "jemmons/Gauntlet" "v1.0"
-github "jemmons/Medea" "v0.1"
+github "jemmons/Medea" "v0.2"
 github "reverbdotcom/rebar" "v0.9"
-github "jemmons/Perfidy" "v0.1"
+github "jemmons/Perfidy" "v0.2"
