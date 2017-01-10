@@ -103,17 +103,17 @@ public struct APISession<T: Endpoint>{
   }
   
   
-  @discardableResult public func dataTask(for endpoint: T, completion: @escaping (DataResponse)->Void) -> URLSessionTask {
+  @discardableResult public func dataTask(for endpoint: T, completion: @escaping (DataResponse)->Void = {_ in}) -> URLSessionTask {
     return task(for: endpoint, completion: completion)
   }
 
 
-  @discardableResult public func jsonObjectTask(for endpoint: T, completion: @escaping (JSONObjectResponse)->Void) -> URLSessionTask {
+  @discardableResult public func jsonObjectTask(for endpoint: T, completion: @escaping (JSONObjectResponse)->Void = {_ in}) -> URLSessionTask {
     return task(for: endpoint, completion: completion)
   }
 
 
-  @discardableResult public func jsonArrayTask(for endpoint: T, completion: @escaping (JSONArrayResponse)->Void) -> URLSessionTask {
+  @discardableResult public func jsonArrayTask(for endpoint: T, completion: @escaping (JSONArrayResponse)->Void = {_ in}) -> URLSessionTask {
     return task(for: endpoint, completion: completion)
   }
 }
