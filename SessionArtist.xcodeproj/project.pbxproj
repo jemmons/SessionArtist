@@ -14,6 +14,7 @@
 		73407A9E1E15A6F100A121DF /* Perfidy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73407A9D1E15A6F100A121DF /* Perfidy.framework */; };
 		7344E2731E15B33C0043D88C /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7344E2721E15B33C0043D88C /* Endpoint.swift */; };
 		7344E2751E15B38E0043D88C /* EndpointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7344E2741E15B38E0043D88C /* EndpointTests.swift */; };
+		739C724C1E25791E00FAF919 /* Host.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739C724B1E25791E00FAF919 /* Host.swift */; };
 		73E21DB41E1C887000FAA805 /* Medea.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73E21DB31E1C887000FAA805 /* Medea.framework */; };
 /* End PBXBuildFile section */
 
@@ -39,6 +40,7 @@
 		73407A9D1E15A6F100A121DF /* Perfidy.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Perfidy.framework; path = Carthage/Build/iOS/Perfidy.framework; sourceTree = "<group>"; };
 		7344E2721E15B33C0043D88C /* Endpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		7344E2741E15B38E0043D88C /* EndpointTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EndpointTests.swift; sourceTree = "<group>"; };
+		739C724B1E25791E00FAF919 /* Host.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Host.swift; sourceTree = "<group>"; };
 		73E21DB11E1C880600FAA805 /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		73E21DB31E1C887000FAA805 /* Medea.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Medea.framework; path = Carthage/Build/iOS/Medea.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -91,6 +93,7 @@
 				7322E4391E12FD12003A6410 /* APISession.h */,
 				7322E4501E12FD20003A6410 /* APISession.swift */,
 				7344E2721E15B33C0043D88C /* Endpoint.swift */,
+				739C724B1E25791E00FAF919 /* Host.swift */,
 				7322E43A1E12FD12003A6410 /* Info.plist */,
 			);
 			path = SessionArtist;
@@ -228,6 +231,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				739C724C1E25791E00FAF919 /* Host.swift in Sources */,
 				7344E2731E15B33C0043D88C /* Endpoint.swift in Sources */,
 				7322E4511E12FD20003A6410 /* APISession.swift in Sources */,
 			);

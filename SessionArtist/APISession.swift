@@ -8,6 +8,11 @@ public typealias JSONArray = Medea.JSONArray
 
 
 
+private enum Const {
+  static let timeout: TimeInterval = 15.0
+}
+
+
 public enum ResponseError: Error {
   case invalidResponse, unknown
 }
@@ -87,15 +92,23 @@ public enum DataResponse: ResponseResult {
 
 public struct APISession<T: Endpoint>{
   private let session: URLSession
+  private let host: Host
   
   
-  public init(headers: [String: String] = [:], timeout: TimeInterval = 15.0){
+  public init(host: String, headers: [String: String] = [:], timeout: TimeInterval = Const.timeout) {
+    let hostURL = URL(string: host)!
+    self.init(host: hostURL, headers: headers, timeout: timeout)
+  }
+  
+  
+  public init(host: URL, headers: [String: String] = [:], timeout: TimeInterval = Const.timeout){
+    self.host = Host(url: host)
     session = SessionHelper.makeSession(headers: headers, timeout: timeout)
   }
   
   
   private func task<R: ResponseResult>(for endpoint: T, completion: @escaping (R) -> Void) -> URLSessionTask {
-    let task = session.dataTask(with: endpoint.request) { data, res, error in
+    let task = session.dataTask(with: endpoint.makeRequest(host: host)) { data, res, error in
       completion(R(data: data, response: res, error: error))
     }
     task.resume()

@@ -4,64 +4,48 @@ import Perfidy
 
 
 
-private enum PerfidyEndpoint: Endpoint {
-  static let scheme = "http"
-  static let host = "localhost"
-  static let port = 10175
-
+private enum MyEndpoint: Endpoint {
   case getEndpoint, postEndpoint, putEndpoint, deleteEndpoint, withHeader
   case withQuery(name: String, age: Int), withForm(name: String, age: Int), withJSON(name: String, age: Int)
   
-  var request: URLRequest {
+  func makeRequest(host: Host) -> URLRequest {
     switch self {
     case .getEndpoint:
-      return get("/get")
+      return host.get("/get")
     case .postEndpoint:
-      return post("/post", params: [])
+      return host.post("/post", params: [])
     case .putEndpoint:
-      return put("/put", params: [])
+      return host.put("/put", params: [])
     case .deleteEndpoint:
-      return delete("/delete")
+      return host.delete("/delete")
     case let .withQuery(name, age):
       let params = [
         URLQueryItem(name: "name", value: name),
         URLQueryItem(name: "age", value: String(age))
       ]
-      return get("/query", params: params)
+      return host.get("/query", params: params)
     case let .withForm(name, age):
       let params = [
         URLQueryItem(name: "name", value: name),
         URLQueryItem(name: "age", value: String(age))
       ]
-      return post("/form", params: params)
+      return host.post("/form", params: params)
     case let .withJSON(name, age):
-      return try! post("/json", json: ["name": name, "age": age])
+      return try! host.post("/json", json: ["name": name, "age": age])
     case .withHeader:
-      return get("/header", headers: ["foo": "bar", "Content-Type": "video/3gpp"])
+      return host.get("/header", headers: ["foo": "bar", "Content-Type": "video/3gpp"])
     }
-    
-  }
-}
-
-
-private enum BogusEndpoint: Endpoint {
-  static let host = "localhost"
-  static let port = 11111
-  
-  case nowhere
-  
-  var request: URLRequest {
-    return get("/")
   }
 }
 
 
 
 private enum API {
-  static let perfidy = APISession<PerfidyEndpoint>()
-  static let bogus = APISession<BogusEndpoint>()
-  static let headers = APISession<PerfidyEndpoint>(headers: ["Content-Type": "x-application/bogus"])
-  static let timeouts = APISession<PerfidyEndpoint>(timeout: 0.1)
+  private static let perfidyURL = URL(string: "http://localhost:10175")!
+  static let perfidy = APISession<MyEndpoint>(host: perfidyURL)
+  static let bogus = APISession<MyEndpoint>(host: "http://localhost:11111")
+  static let headers = APISession<MyEndpoint>(host: perfidyURL, headers: ["Content-Type": "x-application/bogus"])
+  static let timeouts = APISession<MyEndpoint>(host: perfidyURL, timeout: 0.1)
 }
 
 
@@ -113,7 +97,7 @@ class APISessionTests: XCTestCase {
         }
       }
       
-      API.bogus.dataTask(for: .nowhere) { res in
+      API.bogus.dataTask(for: .getEndpoint) { res in
         if case .failure(let e) = res {
           XCTAssertEqual((e as NSError).domain, NSURLErrorDomain)
           XCTAssertEqual((e as NSError).code, -1004)
@@ -147,7 +131,7 @@ class APISessionTests: XCTestCase {
         }
       }
     
-      API.bogus.jsonObjectTask(for: .nowhere) { res in
+      API.bogus.jsonObjectTask(for: .getEndpoint) { res in
         if case .failure(let e) = res {
           XCTAssertEqual((e as NSError).domain, NSURLErrorDomain)
           XCTAssertEqual((e as NSError).code, -1004)
@@ -181,7 +165,7 @@ class APISessionTests: XCTestCase {
         }
       }
       
-      API.bogus.jsonArrayTask(for: .nowhere) { res in
+      API.bogus.jsonArrayTask(for: .getEndpoint) { res in
         if case .failure(let e) = res {
           XCTAssertEqual((e as NSError).domain, NSURLErrorDomain)
           XCTAssertEqual((e as NSError).code, -1004)
