@@ -26,55 +26,49 @@ public extension Endpoint {
   }
   
   
-  func post(_ path: String, params: [URLQueryItem], headers: [String: String] = [:]) -> URLRequest {
+  func post(_ path: String, data: Data?, headers: [String: String] = [:]) -> URLRequest {
     let url = makeURL(scheme: Self.scheme, host: Self.host, port: Self.port, path: path)
     var req = makeRequest(url, headers: headers)
     req.httpMethod = "POST"
-    // If an explicit content type has been passed in, we don't want to overwrite it.
-    if headers["Content-Type"] == nil {
-      req.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-    }
-    req.httpBody = makeQuery(from: params)?.data(using: .utf8)
+    req.httpBody = data
     return req
+  }
+  
+
+  func post(_ path: String, params: [URLQueryItem], headers: [String: String] = [:]) -> URLRequest {
+    let data = makeQuery(from: params)?.data(using: .utf8)
+    let newHeaders = addDefaultContentType("application/x-www-form-urlencoded", to: headers)
+    return post(path, data: data, headers: newHeaders)
   }
 
   
   func post(_ path: String, json: JSONObject, headers: [String: String] = [:]) throws -> URLRequest {
-    let url = makeURL(scheme: Self.scheme, host: Self.host, port: Self.port, path: path)
-    var req = makeRequest(url, headers: headers)
-    req.httpMethod = "POST"
-    // If an explicit content type has been passed in, we don't want to overwrite it.
-    if headers["Content-Type"] == nil {
-      req.setValue("application/json", forHTTPHeaderField: "Content-Type")
-    }
-    req.httpBody = try JSONHelper.data(from: json)
-    return req
+    let data = try JSONHelper.data(from: json)
+    let newHeaders = addDefaultContentType("application/json", to: headers)
+    return post(path, data: data, headers: newHeaders)
   }
 
   
-  func put(_ path: String, params: [URLQueryItem], headers: [String: String] = [:]) -> URLRequest {
+  func put(_ path: String, data: Data?, headers: [String: String] = [:]) -> URLRequest {
     let url = makeURL(scheme: Self.scheme, host: Self.host, port: Self.port, path: path)
     var req = makeRequest(url, headers: headers)
     req.httpMethod = "PUT"
-    // If an explicit content type has been passed in, we don't want to overwrite it.
-    if headers["Content-Type"] == nil {
-      req.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-    }
-    req.httpBody = makeQuery(from: params)?.data(using: .utf8)
+    req.httpBody = data
     return req
+  }
+  
+  
+  func put(_ path: String, params: [URLQueryItem], headers: [String: String] = [:]) -> URLRequest {
+    let data = makeQuery(from: params)?.data(using: .utf8)
+    let newHeaders = addDefaultContentType("application/x-www-form-urlencoded", to: headers)
+    return put(path, data: data, headers: newHeaders)
   }
   
   
   func put(_ path: String, json: JSONObject, headers: [String: String] = [:]) throws -> URLRequest {
-    let url = makeURL(scheme: Self.scheme, host: Self.host, port: Self.port, path: path)
-    var req = makeRequest(url, headers: headers)
-    req.httpMethod = "PUT"
-    // If an explicit content type has been passed in, we don't want to overwrite it.
-    if headers["Content-Type"] == nil {
-      req.setValue("application/json", forHTTPHeaderField: "Content-Type")
-    }
-    req.httpBody = try JSONHelper.data(from: json)
-    return req
+    let data = try JSONHelper.data(from: json)
+    let newHeaders = addDefaultContentType("application/json", to: headers)
+    return put(path, data: data, headers: newHeaders)
   }
   
   
@@ -114,5 +108,16 @@ public extension Endpoint {
       comp.queryItems = queryItems
     }
     return comp.url!
+  }
+  
+  
+  private func addDefaultContentType(_ contentType: String, to oldHeaders: [String: String]) -> [String: String] {
+    // If an explicit content type has been passed in, we don't want to overwrite it.
+    guard oldHeaders["Content-Type"] == nil else {
+      return oldHeaders
+    }
+    var newHeaders = oldHeaders
+    newHeaders["Content-Type"] = contentType
+    return newHeaders
   }
 }

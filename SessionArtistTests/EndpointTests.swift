@@ -24,9 +24,26 @@ private enum DefaultEndpoint: Endpoint {
 }
 
 
+
+private enum DataEndpoint: Endpoint {
+  static let host = "example.com"
+  case postData, putData
+  
+  var request: URLRequest {
+    switch self {
+    case .postData:
+      return post("/", data: "post".data(using: .utf8))
+    case .putData:
+      return post("/", data: "put".data(using: .utf8))
+    }
+  }
+}
+
+
+
 private enum ParamsEndpoint: Endpoint {
   static let host = "example.com"
-  case  withQuery(name: String, age: Int), postForm(name: String, age: Int), putForm(name: String, age: Int)
+  case  withQuery(name: String, age: Int), postForm(name: String, age: Int), putForm(name: String, age: Int), postCustomContent, putCustomContent
 
   var request: URLRequest {
     switch self {
@@ -48,6 +65,11 @@ private enum ParamsEndpoint: Endpoint {
         URLQueryItem(name: "age", value: String(age))
       ]
       return put("/params", params: params)
+    case .postCustomContent:
+      return post("/params", params: [], headers: ["Content-Type": "foo/bar"])
+    case .putCustomContent:
+      return put("/params", params: [], headers: ["Content-Type": "baz/quux"])
+
     }
   }
 }
@@ -55,7 +77,7 @@ private enum ParamsEndpoint: Endpoint {
 
 private enum JSONEndpoint: Endpoint {
   static let host = "example.com"
-  case postJSON(name: String, age: Int), putJSON(name: String, age: Int)
+  case postJSON(name: String, age: Int), putJSON(name: String, age: Int), postCustomContent, putCustomContent
   
   var request: URLRequest {
     switch self {
@@ -63,6 +85,10 @@ private enum JSONEndpoint: Endpoint {
       return try! post("/json", json: ["name": name, "age": age])
     case let .putJSON(name, age):
       return try! put("/json", json: ["name": name, "age": age])
+    case .postCustomContent:
+      return try! post("/json", json: ["foo": "bar"], headers: ["Content-Type": "foo/bar"])
+    case .putCustomContent:
+      return try! put("/json", json: ["foo": "bar"], headers: ["Content-Type": "baz/quux"])
     }
   }
 }
@@ -124,6 +150,15 @@ class EndpointTests: XCTestCase {
   }
 
   
+  func  testDataBody() {
+    var subject = DataEndpoint.postData.request
+    XCTAssertEqual(String(data: subject.httpBody!, encoding: .utf8), "post")
+    
+    subject = DataEndpoint.putData.request
+    XCTAssertEqual(String(data: subject.httpBody!, encoding: .utf8), "put")
+  }
+  
+  
   func testFormParams() {
     var subject: URLRequest
     subject = ParamsEndpoint.postForm(name: "foo", age: 42).request
@@ -155,6 +190,24 @@ class EndpointTests: XCTestCase {
     XCTAssertEqual(String(data: subject.httpBody!, encoding: .utf8), "{\"name\":\"bar\",\"age\":64}")
   }
   
+  
+  func testCustomJSONContentType() {
+    var subject = JSONEndpoint.postCustomContent.request
+    XCTAssertEqual(subject.value(forHTTPHeaderField: "Content-Type"), "foo/bar")
+    
+    subject = JSONEndpoint.putCustomContent.request
+    XCTAssertEqual(subject.value(forHTTPHeaderField: "Content-Type"), "baz/quux")
+  }
+
+  
+  func testCustomParamsContentType() {
+    var subject = ParamsEndpoint.postCustomContent.request
+    XCTAssertEqual(subject.value(forHTTPHeaderField: "Content-Type"), "foo/bar")
+    
+    subject = ParamsEndpoint.putCustomContent.request
+    XCTAssertEqual(subject.value(forHTTPHeaderField: "Content-Type"), "baz/quux")
+  }
+
   
   func testPerfidyEndpoint() {
     let subject = PerfidyEndpoint.anEndpoint.request
