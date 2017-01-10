@@ -60,6 +60,8 @@ private enum BogusEndpoint: Endpoint {
 private enum API {
   static let perfidy = APISession<PerfidyEndpoint>()
   static let bogus = APISession<BogusEndpoint>()
+  static let headers = APISession<PerfidyEndpoint>(headers: ["Content-Type": "x-application/bogus"])
+  static let timeouts = APISession<PerfidyEndpoint>(timeout: 0.1)
 }
 
 
@@ -210,4 +212,43 @@ class APISessionTests: XCTestCase {
       waitForExpectations(timeout: 1.0, handler: nil)
     }
   }
+  
+  
+  func testHeaders() {
+    let shouldReceive = expectation(description: "receives request with header")
+    let shouldRespond = expectation(description: "responds")
+    
+    FakeServer.runWith { server in
+      server.add("/get", response: 200) { req in
+        XCTAssertEqual(req.value(forHTTPHeaderField: "Content-Type"), "x-application/bogus")
+        shouldReceive.fulfill()
+      }
+      
+      API.headers.dataTask(for: .getEndpoint) { _ in
+        shouldRespond.fulfill()
+      }
+      
+      waitForExpectations(timeout: 1.0, handler: nil)
+    }
+  }
+  
+  
+  func testTimeout(){
+    let shouldTimeOut = expectation(description: "times out")
+    FakeServer.runWith { server in
+      server.add("/get", response: 666)
+      
+      API.timeouts.dataTask(for: .getEndpoint) { res in
+        if
+          case .failure(let error as NSError) = res,
+          error.code == -1001,
+          error.domain == NSURLErrorDomain {
+          shouldTimeOut.fulfill()
+        }
+      }
+      
+      waitForExpectations(timeout: 0.5, handler: nil)
+    }
+  }
+  
 }

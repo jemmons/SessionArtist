@@ -89,8 +89,8 @@ public struct APISession<T: Endpoint>{
   private let session: URLSession
   
   
-  public init(){
-    session = SessionHelper.makeSession()
+  public init(headers: [String: String] = [:], timeout: TimeInterval = 15.0){
+    session = SessionHelper.makeSession(headers: headers, timeout: timeout)
   }
   
   
@@ -121,11 +121,13 @@ public struct APISession<T: Endpoint>{
 
 
 private enum SessionHelper {
-  static func makeConfig() -> URLSessionConfiguration {
-    return URLSessionConfiguration.default
-  }
-  static func makeSession() -> URLSession {
-    return URLSession(configuration: makeConfig())
+  static func makeSession(headers: [String: String], timeout: TimeInterval) -> URLSession {
+    let  config = URLSessionConfiguration.default
+    config.requestCachePolicy = .reloadIgnoringLocalCacheData
+    config.httpAdditionalHeaders = headers
+    config.timeoutIntervalForRequest = timeout
+    
+    return URLSession(configuration: config)
   }
 }
 
