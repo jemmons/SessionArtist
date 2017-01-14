@@ -140,7 +140,7 @@ private enum SessionHelper {
     config.httpAdditionalHeaders = headers
     config.timeoutIntervalForRequest = timeout
     
-    return URLSession(configuration: config)
+    return URLSession(configuration: config, delegate: nil, delegateQueue: OperationQueue.main)
   }
 }
 
