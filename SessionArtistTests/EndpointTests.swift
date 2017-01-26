@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 import SessionArtist
+import Medea
 
 
 
@@ -71,6 +72,7 @@ private enum ParamsEndpoint: Endpoint {
 }
 
 
+
 private enum JSONEndpoint: Endpoint {
   case postJSON(name: String, age: Int), putJSON(name: String, age: Int), postCustomContent, putCustomContent
   
@@ -88,6 +90,25 @@ private enum JSONEndpoint: Endpoint {
   }
 }
 
+
+
+private enum GraphEndpoint: Endpoint {
+  case stringSimple, stringVar(name: String), fileSimple, fileEscape
+  
+  
+  func makeRequest(host: Host) -> URLRequest {
+    switch self {
+    case .stringSimple:
+      return try! host.graph("/graph", query: "query{}")
+    case .stringVar(let name):
+      return try! host.graph("/graph", query: "query{}", variables: ["name": name])
+    case .fileSimple:
+      return try! host.graph("/graph", queryNamed: "test", bundle: Bundle(for: EndpointTests.self))
+    case .fileEscape:
+      return try! host.graph("/graph", queryNamed: "escape", bundle: Bundle(for: EndpointTests.self))
+    }
+  }
+}
 
 
 class EndpointTests: XCTestCase {
@@ -116,7 +137,7 @@ class EndpointTests: XCTestCase {
   }
 
   
-  func  testDataBody() {
+  func testDataBody() {
     var subject = DataEndpoint.postData.makeRequest(host: defaultHost)
     XCTAssertEqual(String(data: subject.httpBody!, encoding: .utf8), "post")
     
@@ -154,6 +175,37 @@ class EndpointTests: XCTestCase {
     XCTAssertEqual(subject.httpMethod, "PUT")
     XCTAssertEqual(subject.value(forHTTPHeaderField: "Content-Type"), "application/json")
     XCTAssertEqual(String(data: subject.httpBody!, encoding: .utf8), "{\"name\":\"bar\",\"age\":64}")
+  }
+  
+  
+  func testGraphString() {
+    var subject: URLRequest
+    subject = GraphEndpoint.stringSimple.makeRequest(host: defaultHost)
+    XCTAssertEqual(subject.url!.absoluteString, "http://example.com/graph")
+    XCTAssertEqual(subject.httpMethod, "POST")
+    XCTAssertEqual(subject.value(forHTTPHeaderField: "Content-Type"), "application/json")
+    let json = try! JSONHelper.jsonObject(from: subject.httpBody!)
+    XCTAssertEqual(json["query"] as! String, "query{}")
+    XCTAssertNil(json["variables"])
+    
+    subject = GraphEndpoint.stringVar(name: "foo").makeRequest(host: defaultHost)
+    let variables = try! JSONHelper.jsonObject(from: subject.httpBody!)["variables"] as! [String: String]
+    XCTAssertEqual(variables["name"], "foo")
+  }
+  
+  
+  func testGraphFile() {
+    let subject = GraphEndpoint.fileSimple.makeRequest(host: defaultHost)
+    let json = try! JSONHelper.jsonObject(from: subject.httpBody!)
+    XCTAssertEqual(json["query"] as! String, "query Name {   fake {     name   } } ")
+    XCTAssertNil(json["variables"])
+  }
+  
+  
+  func testGraphEscape() {
+    let subject = GraphEndpoint.fileEscape.makeRequest(host: defaultHost)
+    let json = try! JSONHelper.jsonObject(from: subject.httpBody!)
+    XCTAssertEqual(json["query"] as! String, "mutation {   foo(name: \\\"bobby\\\\ntables\\\") } ")
   }
   
   

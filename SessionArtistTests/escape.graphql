@@ -1,0 +1,3 @@
+mutation {
+  foo(name: "bobby\ntables")
+}

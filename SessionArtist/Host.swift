@@ -80,6 +80,33 @@ public extension Host {
     req.httpMethod = "DELETE"
     return req
   }
+  
+
+  func graph(_ path: String, query: String, variables: JSONObject? = nil, headers: [String: String] = [:]) throws -> URLRequest {
+    let escapedQuery = query
+      .replacingOccurrences(of: "\n", with: " ")
+      .replacingOccurrences(of: "\\", with: "\\\\")
+      .replacingOccurrences(of: "\"", with: "\\\"")
+    
+    var json: JSONObject = ["query": escapedQuery]
+    if let someVariables = variables {
+      try JSONHelper.validate(someVariables)
+      json["variables"] = someVariables
+    }
+    
+    return try post(path, json: json, headers: headers)
+  }
+  
+  
+  func graph(_ path: String, queryNamed name: String, bundle: Bundle = Bundle.main,  variables: JSONObject? = nil, headers: [String: String] = [:]) throws -> URLRequest {
+    guard
+      let url = bundle.url(forResource: name, withExtension: "graphql"),
+      FileManager.default.fileExists(atPath: url.path) else {
+        throw FileError.fileNotFound
+    }
+    let query = try String(contentsOf: url)
+    return try graph(path, query: query, variables: variables, headers: headers)
+  }
 }
 
 
