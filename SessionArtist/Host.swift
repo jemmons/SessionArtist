@@ -83,17 +83,7 @@ public extension Host {
   
 
   func graph(_ path: String, query: String, variables: JSONObject? = nil, headers: [String: String] = [:]) throws -> URLRequest {
-    let escapedQuery = query
-      .replacingOccurrences(of: "\n", with: " ")
-      .replacingOccurrences(of: "\\", with: "\\\\")
-      .replacingOccurrences(of: "\"", with: "\\\"")
-    
-    var json: JSONObject = ["query": escapedQuery]
-    if let someVariables = variables {
-      try JSONHelper.validate(someVariables)
-      json["variables"] = someVariables
-    }
-    
+    let json = try Helper.makeGraphJSON(query: SafeQuery(query), variables: variables)
     return try post(path, json: json, headers: headers)
   }
   
@@ -111,7 +101,32 @@ public extension Host {
 
 
 
+private struct SafeQuery {
+  public let value: String
+  public init(_ unsafe: String) {
+    value = SafeQuery.escape(unsafe)
+  }
+  private static func escape(_ string: String) -> String {
+    return string
+      .replacingOccurrences(of: "\n", with: " ")
+      .replacingOccurrences(of: "\\", with: "\\\\")
+      .replacingOccurrences(of: "\"", with: "\\\"")
+  }
+}
+
+
+
 private enum Helper {
+  static func makeGraphJSON(query: SafeQuery, variables: JSONObject?) throws -> JSONObject {
+    var json: JSONObject = ["query": query.value]
+    if let someVariables = variables {
+      try JSONHelper.validate(someVariables)
+      json["variables"] = someVariables
+    }
+    return json
+  }
+  
+  
   static func makeQuery(from params: [URLQueryItem]) -> String? {
     var comp = URLComponents()
     comp.queryItems = params
