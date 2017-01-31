@@ -17,19 +17,27 @@ public struct Host {
   public init(url: URL) {
     host = url
   }
+  
+  
+  public init?(urlString: String) {
+    guard let url = URL(string: urlString) else {
+      return nil
+    }
+    self.init(url: url)
+  }
 }
 
 
 
 public extension Host {
-  func get(_ path: String, params: [URLQueryItem]? = nil, headers: [String: String] = [:]) -> URLRequest {
-    let url = Helper.makeURL(host: host, path: path, params: params)
+  func get(_ path: String?, params: [URLQueryItem]? = nil, headers: [String: String] = [:]) -> URLRequest {
+    let url = try! Helper.makeURL(host: host, path: path, params: params)
     return Helper.makeRequest(url, headers: headers)
   }
   
   
-  func post(_ path: String, data: Data?, headers: [String: String] = [:]) -> URLRequest {
-    let url = Helper.makeURL(host: host, path: path)
+  func post(_ path: String?, data: Data?, headers: [String: String] = [:]) -> URLRequest {
+    let url = try! Helper.makeURL(host: host, path: path)
     var req = Helper.makeRequest(url, headers: headers)
     req.httpMethod = "POST"
     req.httpBody = data
@@ -37,22 +45,22 @@ public extension Host {
   }
   
   
-  func post(_ path: String, params: [URLQueryItem], headers: [String: String] = [:]) -> URLRequest {
+  func post(_ path: String?, params: [URLQueryItem], headers: [String: String] = [:]) -> URLRequest {
     let data = Helper.makeQuery(from: params)?.data(using: .utf8)
     let newHeaders = Helper.safeAddContentType("application/x-www-form-urlencoded", to: headers)
     return post(path, data: data, headers: newHeaders)
   }
   
   
-  func post(_ path: String, json: JSONObject, headers: [String: String] = [:]) throws -> URLRequest {
+  func post(_ path: String?, json: JSONObject, headers: [String: String] = [:]) throws -> URLRequest {
     let data = try JSONHelper.data(from: json)
     let newHeaders = Helper.safeAddContentType("application/json", to: headers)
     return post(path, data: data, headers: newHeaders)
   }
   
   
-  func put(_ path: String, data: Data?, headers: [String: String] = [:]) -> URLRequest {
-    let url = Helper.makeURL(host: host, path: path)
+  func put(_ path: String?, data: Data?, headers: [String: String] = [:]) -> URLRequest {
+    let url = try! Helper.makeURL(host: host, path: path)
     var req = Helper.makeRequest(url, headers: headers)
     req.httpMethod = "PUT"
     req.httpBody = data
@@ -60,35 +68,35 @@ public extension Host {
   }
   
   
-  func put(_ path: String, params: [URLQueryItem], headers: [String: String] = [:]) -> URLRequest {
+  func put(_ path: String?, params: [URLQueryItem], headers: [String: String] = [:]) -> URLRequest {
     let data = Helper.makeQuery(from: params)?.data(using: .utf8)
     let newHeaders = Helper.safeAddContentType("application/x-www-form-urlencoded", to: headers)
     return put(path, data: data, headers: newHeaders)
   }
   
   
-  func put(_ path: String, json: JSONObject, headers: [String: String] = [:]) throws -> URLRequest {
+  func put(_ path: String?, json: JSONObject, headers: [String: String] = [:]) throws -> URLRequest {
     let data = try JSONHelper.data(from: json)
     let newHeaders = Helper.safeAddContentType("application/json", to: headers)
     return put(path, data: data, headers: newHeaders)
   }
   
   
-  func delete(_ path: String, headers: [String: String] = [:]) -> URLRequest {
-    let url = Helper.makeURL(host: host, path: path)
+  func delete(_ path: String?, headers: [String: String] = [:]) -> URLRequest {
+    let url = try! Helper.makeURL(host: host, path: path)
     var req = Helper.makeRequest(url, headers: headers)
     req.httpMethod = "DELETE"
     return req
   }
   
 
-  func graph(_ path: String, query: String, variables: JSONObject? = nil, headers: [String: String] = [:]) throws -> URLRequest {
+  func graph(_ path: String?, query: String, variables: JSONObject? = nil, headers: [String: String] = [:]) throws -> URLRequest {
     let json = try Helper.makeGraphJSON(query: SafeQuery(query), variables: variables)
     return try post(path, json: json, headers: headers)
   }
   
   
-  func graph(_ path: String, queryNamed name: String, bundle: Bundle = Bundle.main,  variables: JSONObject? = nil, headers: [String: String] = [:]) throws -> URLRequest {
+  func graph(_ path: String?, queryNamed name: String, bundle: Bundle = Bundle.main,  variables: JSONObject? = nil, headers: [String: String] = [:]) throws -> URLRequest {
     guard
       let url = bundle.url(forResource: name, withExtension: "graphql"),
       FileManager.default.fileExists(atPath: url.path) else {
@@ -117,6 +125,11 @@ private struct SafeQuery {
 
 
 private enum Helper {
+  private enum ComponentError: Error {
+    case malformed, badPath
+  }
+  
+  
   static func makeGraphJSON(query: SafeQuery, variables: JSONObject?) throws -> JSONObject {
     var json: JSONObject = ["query": query.value]
     if let someVariables = variables {
@@ -143,13 +156,24 @@ private enum Helper {
   }
 
   
-  static func makeURL(host: URL, path: String, params: [URLQueryItem]? = nil) -> URL {
-    var comp = URLComponents(url: host, resolvingAgainstBaseURL: false)!
-    comp.path = path
-    if let queryItems = params {
-      comp.queryItems = queryItems
+  static func makeURL(host: URL, path: String?, params: [URLQueryItem]? = nil) throws -> URL {
+    var url = host
+    if let somePath = path {
+      url.appendPathComponent(somePath)
     }
-    return comp.url!
+    
+    guard var comp = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+      throw ComponentError.malformed
+    }
+    
+    if let queryItems = params {
+      comp.queryItems = (comp.queryItems ?? []) + queryItems
+    }
+    
+    guard let newURL = comp.url else {
+      throw ComponentError.badPath
+    }
+    return newURL
   }
 
   

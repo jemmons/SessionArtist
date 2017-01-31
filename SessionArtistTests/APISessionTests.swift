@@ -43,7 +43,7 @@ private enum MyEndpoint: Endpoint {
 private enum API {
   private static let perfidyURL = URL(string: "http://localhost:10175")!
   static let perfidy = APISession<MyEndpoint>(host: perfidyURL)
-  static let bogus = APISession<MyEndpoint>(host: "http://localhost:11111")
+  static let bogus = APISession<MyEndpoint>(host: "http://localhost:11111")!
   static let headers = APISession<MyEndpoint>(host: perfidyURL, headers: ["Content-Type": "x-application/bogus"])
   static let timeouts = APISession<MyEndpoint>(host: perfidyURL, timeout: 0.1)
 }

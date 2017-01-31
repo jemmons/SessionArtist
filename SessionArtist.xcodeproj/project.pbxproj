@@ -16,6 +16,7 @@
 		7344E2751E15B38E0043D88C /* EndpointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7344E2741E15B38E0043D88C /* EndpointTests.swift */; };
 		7344F39F1E3521CA0020D91B /* ResponseResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7344F39E1E3521CA0020D91B /* ResponseResult.swift */; };
 		739C724C1E25791E00FAF919 /* Host.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739C724B1E25791E00FAF919 /* Host.swift */; };
+		73BB03DB1E41266F00077EBF /* HostTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73BB03DA1E41266F00077EBF /* HostTests.swift */; };
 		73E21DB41E1C887000FAA805 /* Medea.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73E21DB31E1C887000FAA805 /* Medea.framework */; };
 		73EE51F31E3A9D68008E3300 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EE51F21E3A9D68008E3300 /* Types.swift */; };
 		73EE51F51E3A9E88008E3300 /* test.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 73EE51F41E3A9E88008E3300 /* test.graphql */; };
@@ -46,6 +47,7 @@
 		7344E2741E15B38E0043D88C /* EndpointTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EndpointTests.swift; sourceTree = "<group>"; };
 		7344F39E1E3521CA0020D91B /* ResponseResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResponseResult.swift; sourceTree = "<group>"; };
 		739C724B1E25791E00FAF919 /* Host.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Host.swift; sourceTree = "<group>"; };
+		73BB03DA1E41266F00077EBF /* HostTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HostTests.swift; sourceTree = "<group>"; };
 		73E21DB11E1C880600FAA805 /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		73E21DB31E1C887000FAA805 /* Medea.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Medea.framework; path = Carthage/Build/iOS/Medea.framework; sourceTree = "<group>"; };
 		73EE51F21E3A9D68008E3300 /* Types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 			children = (
 				7322E4441E12FD12003A6410 /* APISessionTests.swift */,
 				7344E2741E15B38E0043D88C /* EndpointTests.swift */,
+				73BB03DA1E41266F00077EBF /* HostTests.swift */,
 				7322E4461E12FD12003A6410 /* Info.plist */,
 				73EE51F41E3A9E88008E3300 /* test.graphql */,
 				73EE51F61E3AA5F0008E3300 /* escape.graphql */,
@@ -259,6 +262,7 @@
 			files = (
 				7344E2751E15B38E0043D88C /* EndpointTests.swift in Sources */,
 				7322E4451E12FD12003A6410 /* APISessionTests.swift in Sources */,
+				73BB03DB1E41266F00077EBF /* HostTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

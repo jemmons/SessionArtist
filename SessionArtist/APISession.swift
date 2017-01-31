@@ -13,14 +13,21 @@ public class APISession<T: Endpoint>{
   private let host: Host
   
   
-  convenience public init(host: String, headers: [String: String] = [:], timeout: TimeInterval = Const.timeout) {
-    let hostURL = URL(string: host)!
-    self.init(host: hostURL, headers: headers, timeout: timeout)
+  convenience public init?(host: String, headers: [String: String] = [:], timeout: TimeInterval = Const.timeout) {
+    guard let newHost = Host(urlString: host) else {
+      return nil
+    }
+    self.init(host: newHost, headers: headers, timeout: timeout)
   }
   
   
-  public init(host: URL, headers: [String: String] = [:], timeout: TimeInterval = Const.timeout){
-    self.host = Host(url: host)
+  convenience public init(host: URL, headers: [String: String] = [:], timeout: TimeInterval = Const.timeout) {
+    self.init(host: Host(url: host), headers: headers, timeout: timeout)
+  }
+  
+  
+  public init(host: Host, headers: [String: String] = [:], timeout: TimeInterval = Const.timeout) {
+    self.host = host
     session = SessionHelper.makeSession(headers: headers, timeout: timeout)
   }
   
