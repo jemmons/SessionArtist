@@ -5,7 +5,7 @@ import Perfidy
 
 
 private enum MyEndpoint: Endpoint {
-  case getEndpoint, postEndpoint, putEndpoint, deleteEndpoint, withHeader
+  case getEndpoint, postEndpoint, putEndpoint, deleteEndpoint, withHeader, graph
   case withQuery(name: String, age: Int), withForm(name: String, age: Int), withJSON(name: String, age: Int)
   
   func makeRequest(host: Host) -> URLRequest {
@@ -34,6 +34,8 @@ private enum MyEndpoint: Endpoint {
       return try! host.post("/json", json: ["name": name, "age": age])
     case .withHeader:
       return host.get("/header", headers: ["foo": "bar", "Content-Type": "video/3gpp"])
+    case .graph:
+      return try! host.graph("/graph", query: "{}")
     }
   }
 }
@@ -235,4 +237,70 @@ class APISessionTests: XCTestCase {
     }
   }
   
+
+  func testGraphSuccess(){
+    let shouldGetResponse = expectation(description: "returns response")
+    FakeServer.runWith { server in
+      server.add("POST /graph", response: ["data": ["my_object": ["foo": "bar"]]])
+      
+      API.perfidy.graphTask(for: .graph, objectName: "my_object") { res in
+        if case .response(200, let json) = res{
+          XCTAssertEqual(json["foo"] as! String, "bar")
+          shouldGetResponse.fulfill()
+        }
+      }
+      
+      waitForExpectations(timeout: 0.5, handler: nil)
+    }
+  }
+  
+
+  func testGraphExecutionError(){
+    let shouldFail = expectation(description: "returns failure")
+    FakeServer.runWith { server in
+      server.add("POST /graph", response: ["data": ["my_object": NSNull()], "errors":[["message": "some execution error"]]])
+      
+      API.perfidy.graphTask(for: .graph, objectName: "my_object") { res in
+        if case .failure(GraphQLError.execution(let message)) = res{
+          XCTAssertEqual(message, "some execution error")
+          shouldFail.fulfill()
+        }
+      }
+      
+      waitForExpectations(timeout: 0.5, handler: nil)
+    }
+  }
+  
+  
+  func testGraphSyntaxError(){
+    let shouldFail = expectation(description: "returns failure")
+    FakeServer.runWith { server in
+      server.add("POST /graph", response: ["errors": [["message": "some syntax error"]]])
+      
+      API.perfidy.graphTask(for: .graph, objectName: "my_object") { res in
+        if case .failure(GraphQLError.syntaxOrValidation(let message)) = res{
+          XCTAssertEqual(message, "some syntax error")
+          shouldFail.fulfill()
+        }
+      }
+      
+      waitForExpectations(timeout: 0.5, handler: nil)
+    }
+  }
+
+
+  func testGraphUnknownError(){
+    let shouldFail = expectation(description: "returns failure")
+    FakeServer.runWith { server in
+      server.add("POST /graph", response: 200)
+      
+      API.perfidy.graphTask(for: .graph, objectName: "my_object") { res in
+        if case .failure(GraphQLError.unknown) = res{
+          shouldFail.fulfill()
+        }
+      }
+      
+      waitForExpectations(timeout: 0.5, handler: nil)
+    }
+  }
 }
