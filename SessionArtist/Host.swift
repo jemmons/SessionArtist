@@ -19,9 +19,9 @@ public struct Host {
   }
   
   
-  public init?(urlString: String) {
+  public init(urlString: String) throws {
     guard let url = URL(string: urlString) else {
-      return nil
+      throw InitializationError.invalidURL
     }
     self.init(url: url)
   }

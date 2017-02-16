@@ -13,10 +13,8 @@ public class APISession<T: Endpoint>{
   private let host: Host
   
   
-  convenience public init?(host: String, headers: [String: String] = [:], timeout: TimeInterval = Const.timeout) {
-    guard let newHost = Host(urlString: host) else {
-      return nil
-    }
+  convenience public init(host: String, headers: [String: String] = [:], timeout: TimeInterval = Const.timeout) throws {
+    let newHost = try Host(urlString: host)
     self.init(host: newHost, headers: headers, timeout: timeout)
   }
   

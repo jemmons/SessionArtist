@@ -6,7 +6,7 @@ import SessionArtist
 
 class HostTests: XCTestCase {
   func testJustHost() {
-    let subject = Host(urlString: "http://example.com")!
+    let subject = try! Host(urlString: "http://example.com")
     subject.withPath(nil, equals: "http://example.com")
     subject.withPath("foo", equals: "http://example.com/foo")
     subject.withPath("/foo", equals: "http://example.com/foo")
@@ -17,16 +17,30 @@ class HostTests: XCTestCase {
   
   
   func testWithPath() {
-    let subject = Host(urlString: "http://example.com/default")!
+    let subject = try! Host(urlString: "http://example.com/default")
     subject.withPath(nil, equals: "http://example.com/default")
     subject.withPath("foo", equals: "http://example.com/default/foo")
     subject.withPath("/foo", equals: "http://example.com/default/foo")
     subject.withPath("/foo/", equals: "http://example.com/default/foo/")
-    subject.withParams([URLQueryItem(name: "foo", value:"bar")], equals: "http://example.com/default?foo=bar")  }
+    subject.withParams([URLQueryItem(name: "foo", value:"bar")], equals: "http://example.com/default?foo=bar")
+  }
 
   
+  func testInvalidPath() {
+    let shouldThrow = expectation(description: "Throws due to bad URL")
+    do {
+      _ = try Host(urlString: "invalid`character")
+    } catch InitializationError.invalidURL {
+      shouldThrow.fulfill()
+    } catch {
+      XCTFail()
+    }
+    waitForExpectations(timeout: 0.1, handler: nil)
+  }
+  
+  
   func testWithTrailingSlash() {
-    let subject = Host(urlString: "http://example.com/default/")!
+    let subject = try! Host(urlString: "http://example.com/default/")
     subject.withPath(nil, equals: "http://example.com/default/")
     subject.withPath("foo", equals: "http://example.com/default/foo")
     //vv Not desireable, but also not unexpected vv
@@ -38,7 +52,7 @@ class HostTests: XCTestCase {
 
 
   func testWithQuery() {
-    let subject = Host(urlString: "http://example.com?key=value")!
+    let subject = try! Host(urlString: "http://example.com?key=value")
     subject.withPath(nil, equals: "http://example.com?key=value")
     subject.withPath("foo", equals: "http://example.com/foo?key=value")
     subject.withPath("/foo", equals: "http://example.com/foo?key=value")
@@ -50,7 +64,7 @@ class HostTests: XCTestCase {
   
 
   func testWithPathAndQuery() {
-    let subject = Host(urlString: "http://example.com/default?key=value")!
+    let subject = try! Host(urlString: "http://example.com/default?key=value")
     subject.withPath(nil, equals: "http://example.com/default?key=value")
     subject.withPath("foo", equals: "http://example.com/default/foo?key=value")
     subject.withPath("/foo", equals: "http://example.com/default/foo?key=value")
