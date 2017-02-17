@@ -33,7 +33,7 @@ private enum MyEndpoint: Endpoint {
     case let .withJSON(name, age):
       return try! host.post("/json", json: ["name": name, "age": age])
     case .withHeader:
-      return host.get("/header", headers: ["foo": "bar", "Content-Type": "video/3gpp"])
+      return host.get("/header", headers: ["foo": "bar", .contentType: "video/3gpp"])
     case .graph:
       return try! host.graph("/graph", query: "{}")
     }
@@ -46,7 +46,7 @@ private enum API {
   private static let perfidyURL = URL(string: "http://localhost:10175")!
   static let perfidy = APISession<MyEndpoint>(host: perfidyURL)
   static let bogus = try! APISession<MyEndpoint>(host: "http://localhost:11111")
-  static let headers = APISession<MyEndpoint>(host: perfidyURL, headers: ["Content-Type": "x-application/bogus"])
+  static let headers = APISession<MyEndpoint>(host: perfidyURL, headers: [.contentType: "x-application/bogus"])
   static let timeouts = APISession<MyEndpoint>(host: perfidyURL, timeout: 0.1)
 }
 

@@ -13,18 +13,18 @@ public class APISession<T: Endpoint>{
   private let host: Host
   
   
-  convenience public init(host: String, headers: [String: String] = [:], timeout: TimeInterval = Const.timeout) throws {
+  convenience public init(host: String, headers: [HTTPHeaderField: String] = [:], timeout: TimeInterval = Const.timeout) throws {
     let newHost = try Host(urlString: host)
     self.init(host: newHost, headers: headers, timeout: timeout)
   }
   
   
-  convenience public init(host: URL, headers: [String: String] = [:], timeout: TimeInterval = Const.timeout) {
+  convenience public init(host: URL, headers: [HTTPHeaderField: String] = [:], timeout: TimeInterval = Const.timeout) {
     self.init(host: Host(url: host), headers: headers, timeout: timeout)
   }
   
   
-  public init(host: Host, headers: [String: String] = [:], timeout: TimeInterval = Const.timeout) {
+  public init(host: Host, headers: [HTTPHeaderField: String] = [:], timeout: TimeInterval = Const.timeout) {
     self.host = host
     session = Helper.makeSession(headers: headers, timeout: timeout)
   }
@@ -69,13 +69,20 @@ public class APISession<T: Endpoint>{
 
 
 private enum Helper {
-  static func makeSession(headers: [String: String], timeout: TimeInterval) -> URLSession {
+  static func makeSession(headers: [HTTPHeaderField: String], timeout: TimeInterval) -> URLSession {
     let  config = URLSessionConfiguration.default
     config.requestCachePolicy = .reloadIgnoringLocalCacheData
-    config.httpAdditionalHeaders = headers
+    config.httpAdditionalHeaders = sessionHeaders(from: headers)
     config.timeoutIntervalForRequest = timeout
     
     return URLSession(configuration: config, delegate: nil, delegateQueue: OperationQueue.main)
+  }
+  
+  
+  private static func sessionHeaders(from headers: [HTTPHeaderField: String]) -> [String: String] {
+    var sessionHeaders = [String: String]()
+    headers.forEach { sessionHeaders[$0.description] = $1 }
+    return sessionHeaders
   }
   
   

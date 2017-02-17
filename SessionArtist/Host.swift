@@ -30,13 +30,13 @@ public struct Host {
 
 
 public extension Host {
-  func get(_ path: String?, params: [URLQueryItem]? = nil, headers: [String: String] = [:]) -> URLRequest {
+  func get(_ path: String?, params: [URLQueryItem]? = nil, headers: [HTTPHeaderField: String] = [:]) -> URLRequest {
     let url = try! Helper.makeURL(host: host, path: path, params: params)
     return Helper.makeRequest(url, headers: headers)
   }
   
   
-  func post(_ path: String?, data: Data?, headers: [String: String] = [:]) -> URLRequest {
+  func post(_ path: String?, data: Data?, headers: [HTTPHeaderField: String] = [:]) -> URLRequest {
     let url = try! Helper.makeURL(host: host, path: path)
     var req = Helper.makeRequest(url, headers: headers)
     req.httpMethod = "POST"
@@ -45,21 +45,21 @@ public extension Host {
   }
   
   
-  func post(_ path: String?, params: [URLQueryItem], headers: [String: String] = [:]) -> URLRequest {
+  func post(_ path: String?, params: [URLQueryItem], headers: [HTTPHeaderField: String] = [:]) -> URLRequest {
     let data = Helper.makeQuery(from: params)?.data(using: .utf8)
     let newHeaders = Helper.safeAddContentType("application/x-www-form-urlencoded", to: headers)
     return post(path, data: data, headers: newHeaders)
   }
   
   
-  func post(_ path: String?, json: JSONObject, headers: [String: String] = [:]) throws -> URLRequest {
+  func post(_ path: String?, json: JSONObject, headers: [HTTPHeaderField: String] = [:]) throws -> URLRequest {
     let data = try JSONHelper.data(from: json)
     let newHeaders = Helper.safeAddContentType("application/json", to: headers)
     return post(path, data: data, headers: newHeaders)
   }
   
   
-  func put(_ path: String?, data: Data?, headers: [String: String] = [:]) -> URLRequest {
+  func put(_ path: String?, data: Data?, headers: [HTTPHeaderField: String] = [:]) -> URLRequest {
     let url = try! Helper.makeURL(host: host, path: path)
     var req = Helper.makeRequest(url, headers: headers)
     req.httpMethod = "PUT"
@@ -68,21 +68,21 @@ public extension Host {
   }
   
   
-  func put(_ path: String?, params: [URLQueryItem], headers: [String: String] = [:]) -> URLRequest {
+  func put(_ path: String?, params: [URLQueryItem], headers: [HTTPHeaderField: String] = [:]) -> URLRequest {
     let data = Helper.makeQuery(from: params)?.data(using: .utf8)
     let newHeaders = Helper.safeAddContentType("application/x-www-form-urlencoded", to: headers)
     return put(path, data: data, headers: newHeaders)
   }
   
   
-  func put(_ path: String?, json: JSONObject, headers: [String: String] = [:]) throws -> URLRequest {
+  func put(_ path: String?, json: JSONObject, headers: [HTTPHeaderField: String] = [:]) throws -> URLRequest {
     let data = try JSONHelper.data(from: json)
     let newHeaders = Helper.safeAddContentType("application/json", to: headers)
     return put(path, data: data, headers: newHeaders)
   }
   
   
-  func delete(_ path: String?, headers: [String: String] = [:]) -> URLRequest {
+  func delete(_ path: String?, headers: [HTTPHeaderField: String] = [:]) -> URLRequest {
     let url = try! Helper.makeURL(host: host, path: path)
     var req = Helper.makeRequest(url, headers: headers)
     req.httpMethod = "DELETE"
@@ -90,13 +90,13 @@ public extension Host {
   }
   
 
-  func graph(_ path: String?, query: String, variables: JSONObject? = nil, headers: [String: String] = [:]) throws -> URLRequest {
+  func graph(_ path: String?, query: String, variables: JSONObject? = nil, headers: [HTTPHeaderField: String] = [:]) throws -> URLRequest {
     let json = try Helper.makeGraphJSON(query: SafeQuery(query), variables: variables)
     return try post(path, json: json, headers: headers)
   }
   
   
-  func graph(_ path: String?, queryNamed name: String, bundle: Bundle = Bundle.main,  variables: JSONObject? = nil, headers: [String: String] = [:]) throws -> URLRequest {
+  func graph(_ path: String?, queryNamed name: String, bundle: Bundle = Bundle.main,  variables: JSONObject? = nil, headers: [HTTPHeaderField: String] = [:]) throws -> URLRequest {
     guard
       let url = bundle.url(forResource: name, withExtension: "graphql"),
       FileManager.default.fileExists(atPath: url.path) else {
@@ -147,10 +147,10 @@ private enum Helper {
   }
   
   
-  static func makeRequest(_ url: URL, headers: [String: String]) -> URLRequest {
+  static func makeRequest(_ url: URL, headers: [HTTPHeaderField: String]) -> URLRequest {
     var req = URLRequest(url: url)
     headers.forEach { field, value in
-      req.setValue(value, forHTTPHeaderField: field)
+      req.setValue(value, forHTTPHeaderField: field.description)
     }
     return req
   }
@@ -177,13 +177,13 @@ private enum Helper {
   }
 
   
-  static func safeAddContentType(_ contentType: String, to oldHeaders: [String: String]) -> [String: String] {
+  static func safeAddContentType(_ contentType: String, to oldHeaders: [HTTPHeaderField: String]) -> [HTTPHeaderField: String] {
     // If an explicit content type has been passed in, we don't want to overwrite it.
-    guard oldHeaders["Content-Type"] == nil else {
+    guard oldHeaders[.contentType] == nil else {
       return oldHeaders
     }
     var newHeaders = oldHeaders
-    newHeaders["Content-Type"] = contentType
+    newHeaders[.contentType] = contentType
     return newHeaders
   }
 }

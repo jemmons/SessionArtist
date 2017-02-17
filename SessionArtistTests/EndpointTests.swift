@@ -63,9 +63,9 @@ private enum ParamsEndpoint: Endpoint {
       ]
       return host.put("/params", params: params)
     case .postCustomContent:
-      return host.post("/params", params: [], headers: ["Content-Type": "foo/bar"])
+      return host.post("/params", params: [], headers: [.contentType: "foo/bar"])
     case .putCustomContent:
-      return host.put("/params", params: [], headers: ["Content-Type": "baz/quux"])
+      return host.put("/params", params: [], headers: [.contentType: "baz/quux"])
 
     }
   }
@@ -83,9 +83,9 @@ private enum JSONEndpoint: Endpoint {
     case let .putJSON(name, age):
       return try! host.put("/json", json: ["name": name, "age": age])
     case .postCustomContent:
-      return try! host.post("/json", json: ["foo": "bar"], headers: ["Content-Type": "foo/bar"])
+      return try! host.post("/json", json: ["foo": "bar"], headers: [.contentType: "foo/bar"])
     case .putCustomContent:
-      return try! host.put("/json", json: ["foo": "bar"], headers: ["Content-Type": "baz/quux"])
+      return try! host.put("/json", json: ["foo": "bar"], headers: [.contentType: "baz/quux"])
     }
   }
 }
