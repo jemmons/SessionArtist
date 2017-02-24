@@ -9,10 +9,11 @@
 /* Begin PBXBuildFile section */
 		730AC0C21E56624C007DD57B /* HTTPHeaderKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730AC0C11E56624C007DD57B /* HTTPHeaderKey.swift */; };
 		730AC0C41E575920007DD57B /* HTTPHeaderKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730AC0C31E575920007DD57B /* HTTPHeaderKeyTests.swift */; };
+		730AC0C91E57978D007DD57B /* .jazzy.yaml in Resources */ = {isa = PBXBuildFile; fileRef = 730AC0C81E57978D007DD57B /* .jazzy.yaml */; };
+		730AC0CB1E57A7F3007DD57B /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 730AC0CA1E57A7F3007DD57B /* README.md */; };
 		7322E4401E12FD12003A6410 /* SessionArtist.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7322E4361E12FD12003A6410 /* SessionArtist.framework */; };
-		7322E4451E12FD12003A6410 /* APISessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7322E4441E12FD12003A6410 /* APISessionTests.swift */; };
-		7322E4471E12FD12003A6410 /* APISession.h in Headers */ = {isa = PBXBuildFile; fileRef = 7322E4391E12FD12003A6410 /* APISession.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7322E4511E12FD20003A6410 /* APISession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7322E4501E12FD20003A6410 /* APISession.swift */; };
+		7322E4451E12FD12003A6410 /* ServiceSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7322E4441E12FD12003A6410 /* ServiceSessionTests.swift */; };
+		7322E4511E12FD20003A6410 /* ServiceSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7322E4501E12FD20003A6410 /* ServiceSession.swift */; };
 		73407A9E1E15A6F100A121DF /* Perfidy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73407A9D1E15A6F100A121DF /* Perfidy.framework */; };
 		7344E2731E15B33C0043D88C /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7344E2721E15B33C0043D88C /* Endpoint.swift */; };
 		7344E2751E15B38E0043D88C /* EndpointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7344E2741E15B38E0043D88C /* EndpointTests.swift */; };
@@ -38,13 +39,14 @@
 /* Begin PBXFileReference section */
 		730AC0C11E56624C007DD57B /* HTTPHeaderKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPHeaderKey.swift; sourceTree = "<group>"; };
 		730AC0C31E575920007DD57B /* HTTPHeaderKeyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = HTTPHeaderKeyTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		730AC0C81E57978D007DD57B /* .jazzy.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .jazzy.yaml; sourceTree = "<group>"; };
+		730AC0CA1E57A7F3007DD57B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		7322E4361E12FD12003A6410 /* SessionArtist.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SessionArtist.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7322E4391E12FD12003A6410 /* APISession.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APISession.h; sourceTree = "<group>"; };
 		7322E43A1E12FD12003A6410 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7322E43F1E12FD12003A6410 /* SessionArtistTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SessionArtistTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		7322E4441E12FD12003A6410 /* APISessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APISessionTests.swift; sourceTree = "<group>"; };
+		7322E4441E12FD12003A6410 /* ServiceSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceSessionTests.swift; sourceTree = "<group>"; };
 		7322E4461E12FD12003A6410 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7322E4501E12FD20003A6410 /* APISession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = APISession.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		7322E4501E12FD20003A6410 /* ServiceSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ServiceSession.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		73407A9A1E15A67300A121DF /* Cartfile.private */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile.private; sourceTree = "<group>"; };
 		73407A9D1E15A6F100A121DF /* Perfidy.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Perfidy.framework; path = Carthage/Build/iOS/Perfidy.framework; sourceTree = "<group>"; };
 		7344E2721E15B33C0043D88C /* Endpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
@@ -85,6 +87,8 @@
 			children = (
 				73E21DB11E1C880600FAA805 /* Cartfile */,
 				73407A9A1E15A67300A121DF /* Cartfile.private */,
+				730AC0C81E57978D007DD57B /* .jazzy.yaml */,
+				730AC0CA1E57A7F3007DD57B /* README.md */,
 				7322E4381E12FD12003A6410 /* SessionArtist */,
 				7322E4431E12FD12003A6410 /* SessionArtistTests */,
 				7322E4371E12FD12003A6410 /* Products */,
@@ -104,8 +108,7 @@
 		7322E4381E12FD12003A6410 /* SessionArtist */ = {
 			isa = PBXGroup;
 			children = (
-				7322E4391E12FD12003A6410 /* APISession.h */,
-				7322E4501E12FD20003A6410 /* APISession.swift */,
+				7322E4501E12FD20003A6410 /* ServiceSession.swift */,
 				7344F39E1E3521CA0020D91B /* ResponseResult.swift */,
 				7344E2721E15B33C0043D88C /* Endpoint.swift */,
 				739C724B1E25791E00FAF919 /* Host.swift */,
@@ -119,7 +122,7 @@
 		7322E4431E12FD12003A6410 /* SessionArtistTests */ = {
 			isa = PBXGroup;
 			children = (
-				7322E4441E12FD12003A6410 /* APISessionTests.swift */,
+				7322E4441E12FD12003A6410 /* ServiceSessionTests.swift */,
 				7344E2741E15B38E0043D88C /* EndpointTests.swift */,
 				73BB03DA1E41266F00077EBF /* HostTests.swift */,
 				7322E4461E12FD12003A6410 /* Info.plist */,
@@ -146,7 +149,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7322E4471E12FD12003A6410 /* APISession.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,6 +237,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				730AC0C91E57978D007DD57B /* .jazzy.yaml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -257,9 +260,10 @@
 				730AC0C21E56624C007DD57B /* HTTPHeaderKey.swift in Sources */,
 				739C724C1E25791E00FAF919 /* Host.swift in Sources */,
 				7344F39F1E3521CA0020D91B /* ResponseResult.swift in Sources */,
+				730AC0CB1E57A7F3007DD57B /* README.md in Sources */,
 				7344E2731E15B33C0043D88C /* Endpoint.swift in Sources */,
 				73EE51F31E3A9D68008E3300 /* Types.swift in Sources */,
-				7322E4511E12FD20003A6410 /* APISession.swift in Sources */,
+				7322E4511E12FD20003A6410 /* ServiceSession.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,7 +273,7 @@
 			files = (
 				730AC0C41E575920007DD57B /* HTTPHeaderKeyTests.swift in Sources */,
 				7344E2751E15B38E0043D88C /* EndpointTests.swift in Sources */,
-				7322E4451E12FD12003A6410 /* APISessionTests.swift in Sources */,
+				7322E4451E12FD12003A6410 /* ServiceSessionTests.swift in Sources */,
 				73BB03DB1E41266F00077EBF /* HostTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -1,0 +1,9 @@
+clean: true
+author: Joshua Emmons
+author_url: https://figure.ink
+github_url: https://github.com/jemmons/SessionArtist
+
+custom_categories:
+- name: Public Interface
+  children:
+  - ServiceSession

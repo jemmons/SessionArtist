@@ -1,0 +1,488 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/Endpoint.swift",
+      "line": 5,
+      "symbol": "Endpoint",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/Endpoint.swift",
+      "line": 6,
+      "symbol": "Endpoint.makeRequest(host:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/HTTPHeaderKey.swift",
+      "line": null,
+      "symbol": "HTTPHeaderField",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/HTTPHeaderKey.swift",
+      "line": null,
+      "symbol": "HTTPHeaderField",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/HTTPHeaderKey.swift",
+      "line": null,
+      "symbol": "HTTPHeaderField",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/HTTPHeaderKey.swift",
+      "line": null,
+      "symbol": "HTTPHeaderField",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/HTTPHeaderKey.swift",
+      "line": 5,
+      "symbol": "HTTPHeaderField",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/HTTPHeaderKey.swift",
+      "line": 6,
+      "symbol": "HTTPHeaderField.accept",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/HTTPHeaderKey.swift",
+      "line": 6,
+      "symbol": "HTTPHeaderField.acceptCharset",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/HTTPHeaderKey.swift",
+      "line": 6,
+      "symbol": "HTTPHeaderField.acceptEncoding",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/HTTPHeaderKey.swift",
+      "line": 6,
+      "symbol": "HTTPHeaderField.acceptLanguage",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/HTTPHeaderKey.swift",
+      "line": 6,
+      "symbol": "HTTPHeaderField.acceptVersion",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/HTTPHeaderKey.swift",
+      "line": 6,
+      "symbol": "HTTPHeaderField.authorization",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/HTTPHeaderKey.swift",
+      "line": 6,
+      "symbol": "HTTPHeaderField.cacheControl",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/HTTPHeaderKey.swift",
+      "line": 6,
+      "symbol": "HTTPHeaderField.connection",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/HTTPHeaderKey.swift",
+      "line": 6,
+      "symbol": "HTTPHeaderField.contentLength",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/HTTPHeaderKey.swift",
+      "line": 6,
+      "symbol": "HTTPHeaderField.contentMD5",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/HTTPHeaderKey.swift",
+      "line": 6,
+      "symbol": "HTTPHeaderField.contentType",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/HTTPHeaderKey.swift",
+      "line": 6,
+      "symbol": "HTTPHeaderField.cookie",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/HTTPHeaderKey.swift",
+      "line": 6,
+      "symbol": "HTTPHeaderField.date",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/HTTPHeaderKey.swift",
+      "line": 6,
+      "symbol": "HTTPHeaderField.host",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/HTTPHeaderKey.swift",
+      "line": 6,
+      "symbol": "HTTPHeaderField.origin",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/HTTPHeaderKey.swift",
+      "line": 6,
+      "symbol": "HTTPHeaderField.referer",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/HTTPHeaderKey.swift",
+      "line": 6,
+      "symbol": "HTTPHeaderField.userAgent",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/HTTPHeaderKey.swift",
+      "line": 7,
+      "symbol": "HTTPHeaderField.other",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/Host.swift",
+      "line": null,
+      "symbol": "Host",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/Host.swift",
+      "line": 6,
+      "symbol": "Host",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/Host.swift",
+      "line": 17,
+      "symbol": "Host.init(url:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/Host.swift",
+      "line": 22,
+      "symbol": "Host.init(urlString:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/Host.swift",
+      "line": 33,
+      "symbol": "Host.get(_:params:headers:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/Host.swift",
+      "line": 39,
+      "symbol": "Host.post(_:data:headers:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/Host.swift",
+      "line": 48,
+      "symbol": "Host.post(_:params:headers:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/Host.swift",
+      "line": 55,
+      "symbol": "Host.post(_:json:headers:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/Host.swift",
+      "line": 62,
+      "symbol": "Host.put(_:data:headers:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/Host.swift",
+      "line": 71,
+      "symbol": "Host.put(_:params:headers:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/Host.swift",
+      "line": 78,
+      "symbol": "Host.put(_:json:headers:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/Host.swift",
+      "line": 85,
+      "symbol": "Host.delete(_:headers:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/Host.swift",
+      "line": 93,
+      "symbol": "Host.graph(_:query:variables:headers:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/Host.swift",
+      "line": 99,
+      "symbol": "Host.graph(_:queryNamed:bundle:variables:headers:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/ResponseResult.swift",
+      "line": 6,
+      "symbol": "ResponseError",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/ResponseResult.swift",
+      "line": 7,
+      "symbol": "ResponseError.invalidResponse",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/ResponseResult.swift",
+      "line": 7,
+      "symbol": "ResponseError.unknown",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/ResponseResult.swift",
+      "line": 18,
+      "symbol": "JSONObjectResponse",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/ResponseResult.swift",
+      "line": 19,
+      "symbol": "JSONObjectResponse.response",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/ResponseResult.swift",
+      "line": 20,
+      "symbol": "JSONObjectResponse.failure",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/ResponseResult.swift",
+      "line": 23,
+      "symbol": "JSONObjectResponse.init(data:response:error:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/ResponseResult.swift",
+      "line": 41,
+      "symbol": "JSONArrayResponse",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/ResponseResult.swift",
+      "line": 42,
+      "symbol": "JSONArrayResponse.response",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/ResponseResult.swift",
+      "line": 43,
+      "symbol": "JSONArrayResponse.failure",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/ResponseResult.swift",
+      "line": 46,
+      "symbol": "JSONArrayResponse.init(data:response:error:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/ResponseResult.swift",
+      "line": 64,
+      "symbol": "DataResponse",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/ResponseResult.swift",
+      "line": 65,
+      "symbol": "DataResponse.response",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/ResponseResult.swift",
+      "line": 66,
+      "symbol": "DataResponse.failure",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/ResponseResult.swift",
+      "line": 69,
+      "symbol": "DataResponse.init(data:response:error:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/ServiceSession.swift",
+      "line": 12,
+      "symbol": "ServiceSession",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/ServiceSession.swift",
+      "line": 28,
+      "symbol": "ServiceSession.init(host:headers:timeout:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/ServiceSession.swift",
+      "line": 33,
+      "symbol": "ServiceSession.init(host:headers:timeout:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/ServiceSession.swift",
+      "line": 48,
+      "symbol": "ServiceSession.dataTask(for:completion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/ServiceSession.swift",
+      "line": 53,
+      "symbol": "ServiceSession.jsonObjectTask(for:completion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/ServiceSession.swift",
+      "line": 58,
+      "symbol": "ServiceSession.jsonArrayTask(for:completion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/ServiceSession.swift",
+      "line": 63,
+      "symbol": "ServiceSession.graphTask(for:objectName:completion:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/Types.swift",
+      "line": 5,
+      "symbol": "FileError",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/Types.swift",
+      "line": 6,
+      "symbol": "FileError.fileNotFound",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/Types.swift",
+      "line": 11,
+      "symbol": "GraphQLError",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/Types.swift",
+      "line": 12,
+      "symbol": "GraphQLError.syntaxOrValidation",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/Types.swift",
+      "line": 13,
+      "symbol": "GraphQLError.execution",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/Types.swift",
+      "line": 14,
+      "symbol": "GraphQLError.unknown",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/Types.swift",
+      "line": 19,
+      "symbol": "InitializationError",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/skia/code/mcmxcix/SessionArtist/SessionArtist/Types.swift",
+      "line": 20,
+      "symbol": "InitializationError.invalidURL",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/skia/code/mcmxcix/SessionArtist"
+}

@@ -3,16 +3,22 @@ import typealias Medea.JSONObject
 
 
 private enum Const {
+  /// Default session timeout.
   static let timeout: TimeInterval = 15.0
 }
 
 
 
-public class APISession<T: Endpoint>{
+public class ServiceSession<T: Endpoint>{
   private let session: URLSession
   private let host: Host
   
-  
+  /**
+   * parameter host: String representation of the host's URL.
+   * parameter headers: A collection of HTTP headers that should be sent with all tasks created by
+   * parameter timeout:
+   * throws: Thing and stuff.
+   **/
   convenience public init(host: String, headers: [HTTPHeaderField: String] = [:], timeout: TimeInterval = Const.timeout) throws {
     let newHost = try Host(urlString: host)
     self.init(host: newHost, headers: headers, timeout: timeout)

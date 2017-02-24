@@ -42,17 +42,17 @@ private enum MyEndpoint: Endpoint {
 
 
 
-private enum API {
+private enum Service {
   private static let perfidyURL = URL(string: "http://localhost:10175")!
-  static let perfidy = APISession<MyEndpoint>(host: perfidyURL)
-  static let bogus = try! APISession<MyEndpoint>(host: "http://localhost:11111")
-  static let headers = APISession<MyEndpoint>(host: perfidyURL, headers: [.contentType: "x-application/bogus"])
-  static let timeouts = APISession<MyEndpoint>(host: perfidyURL, timeout: 0.1)
+  static let perfidy = ServiceSession<MyEndpoint>(host: perfidyURL)
+  static let bogus = try! ServiceSession<MyEndpoint>(host: "http://localhost:11111")
+  static let headers = ServiceSession<MyEndpoint>(host: perfidyURL, headers: [.contentType: "x-application/bogus"])
+  static let timeouts = ServiceSession<MyEndpoint>(host: perfidyURL, timeout: 0.1)
 }
 
 
 
-class APISessionTests: XCTestCase {
+class ServiceSessionTests: XCTestCase {
   func testVerbs() {
     let shouldGet = expectation(description: "GET request")
     let shouldPost = expectation(description: "POST request")
@@ -61,22 +61,22 @@ class APISessionTests: XCTestCase {
 
     FakeServer.runWith { server in
       server.add(["GET /get", "POST /post", "PUT /put", "DELETE /delete"])
-      API.perfidy.dataTask(for: .getEndpoint) {
+      Service.perfidy.dataTask(for: .getEndpoint) {
         if case .response(200, _) = $0 {
           shouldGet.fulfill()
         }
       }
-      API.perfidy.dataTask(for: .postEndpoint) {
+      Service.perfidy.dataTask(for: .postEndpoint) {
         if case .response(200, _) = $0 {
           shouldPost.fulfill()
         }
       }
-      API.perfidy.dataTask(for: .putEndpoint) {
+      Service.perfidy.dataTask(for: .putEndpoint) {
         if case .response(200, _) = $0 {
           shouldPut.fulfill()
         }
       }
-      API.perfidy.dataTask(for: .deleteEndpoint) {
+      Service.perfidy.dataTask(for: .deleteEndpoint) {
         if case .response(200, _) = $0 {
           shouldDelete.fulfill()
         }
@@ -92,14 +92,14 @@ class APISessionTests: XCTestCase {
     
     FakeServer.runWith { server in
       server.add("/get", response: "foo")
-      API.perfidy.dataTask(for: .getEndpoint) { res in
+      Service.perfidy.dataTask(for: .getEndpoint) { res in
         if case .response(200, let d) = res {
           XCTAssertEqual(String(data: d, encoding: .utf8), "foo")
           shouldGetData.fulfill()
         }
       }
       
-      API.bogus.dataTask(for: .getEndpoint) { res in
+      Service.bogus.dataTask(for: .getEndpoint) { res in
         if case .failure(let e) = res {
           XCTAssertEqual((e as NSError).domain, NSURLErrorDomain)
           XCTAssertEqual((e as NSError).code, -1004)
@@ -120,20 +120,20 @@ class APISessionTests: XCTestCase {
     FakeServer.runWith { server in
       server.add("/get", response: ["foo": "bar"])
       server.add("POST /post", response: "foobar")
-      API.perfidy.jsonObjectTask(for: .getEndpoint) { res in
+      Service.perfidy.jsonObjectTask(for: .getEndpoint) { res in
         if case .response(200, let j) = res {
           XCTAssertEqual(j as! [String: String], ["foo": "bar"])
           shouldGetJSON.fulfill()
         }
       }
       
-      API.perfidy.jsonObjectTask(for: .postEndpoint) { res in
+      Service.perfidy.jsonObjectTask(for: .postEndpoint) { res in
         if case .failure = res {
           shouldFailParsing.fulfill()
         }
       }
     
-      API.bogus.jsonObjectTask(for: .getEndpoint) { res in
+      Service.bogus.jsonObjectTask(for: .getEndpoint) { res in
         if case .failure(let e) = res {
           XCTAssertEqual((e as NSError).domain, NSURLErrorDomain)
           XCTAssertEqual((e as NSError).code, -1004)
@@ -154,20 +154,20 @@ class APISessionTests: XCTestCase {
     FakeServer.runWith { server in
       server.add("/get", response: try! Response(jsonArray: ["foo", "bar"]))
       server.add("POST /post", response: "foobar")
-      API.perfidy.jsonArrayTask(for: .getEndpoint) { res in
+      Service.perfidy.jsonArrayTask(for: .getEndpoint) { res in
         if case .response(200, let j) = res {
           XCTAssertEqual(j as! [String], ["foo", "bar"])
           shouldGetJSON.fulfill()
         }
       }
       
-      API.perfidy.jsonArrayTask(for: .postEndpoint) { res in
+      Service.perfidy.jsonArrayTask(for: .postEndpoint) { res in
         if case .failure = res {
           shouldFailParsing.fulfill()
         }
       }
       
-      API.bogus.jsonArrayTask(for: .getEndpoint) { res in
+      Service.bogus.jsonArrayTask(for: .getEndpoint) { res in
         if case .failure(let e) = res {
           XCTAssertEqual((e as NSError).domain, NSURLErrorDomain)
           XCTAssertEqual((e as NSError).code, -1004)
@@ -191,7 +191,7 @@ class APISessionTests: XCTestCase {
         shouldReceive.fulfill()
       }
       
-      API.perfidy.dataTask(for: .withHeader) { _ in
+      Service.perfidy.dataTask(for: .withHeader) { _ in
         shouldRespond.fulfill()
       }
       
@@ -210,7 +210,7 @@ class APISessionTests: XCTestCase {
         shouldReceive.fulfill()
       }
       
-      API.headers.dataTask(for: .getEndpoint) { _ in
+      Service.headers.dataTask(for: .getEndpoint) { _ in
         shouldRespond.fulfill()
       }
       
@@ -224,7 +224,7 @@ class APISessionTests: XCTestCase {
     FakeServer.runWith { server in
       server.add("/get", response: 666)
       
-      API.timeouts.dataTask(for: .getEndpoint) { res in
+      Service.timeouts.dataTask(for: .getEndpoint) { res in
         if
           case .failure(let error as NSError) = res,
           error.code == -1001,
@@ -243,7 +243,7 @@ class APISessionTests: XCTestCase {
     FakeServer.runWith { server in
       server.add("POST /graph", response: ["data": ["my_object": ["foo": "bar"]]])
       
-      API.perfidy.graphTask(for: .graph, objectName: "my_object") { res in
+      Service.perfidy.graphTask(for: .graph, objectName: "my_object") { res in
         if case .response(200, let json) = res{
           XCTAssertEqual(json["foo"] as! String, "bar")
           shouldGetResponse.fulfill()
@@ -260,7 +260,7 @@ class APISessionTests: XCTestCase {
     FakeServer.runWith { server in
       server.add("POST /graph", response: ["data": ["my_object": NSNull()], "errors":[["message": "some execution error"]]])
       
-      API.perfidy.graphTask(for: .graph, objectName: "my_object") { res in
+      Service.perfidy.graphTask(for: .graph, objectName: "my_object") { res in
         if case .failure(GraphQLError.execution(let message)) = res{
           XCTAssertEqual(message, "some execution error")
           shouldFail.fulfill()
@@ -277,7 +277,7 @@ class APISessionTests: XCTestCase {
     FakeServer.runWith { server in
       server.add("POST /graph", response: ["errors": [["message": "some syntax error"]]])
       
-      API.perfidy.graphTask(for: .graph, objectName: "my_object") { res in
+      Service.perfidy.graphTask(for: .graph, objectName: "my_object") { res in
         if case .failure(GraphQLError.syntaxOrValidation(let message)) = res{
           XCTAssertEqual(message, "some syntax error")
           shouldFail.fulfill()
@@ -294,7 +294,7 @@ class APISessionTests: XCTestCase {
     FakeServer.runWith { server in
       server.add("POST /graph", response: 200)
       
-      API.perfidy.graphTask(for: .graph, objectName: "my_object") { res in
+      Service.perfidy.graphTask(for: .graph, objectName: "my_object") { res in
         if case .failure(GraphQLError.unknown) = res{
           shouldFail.fulfill()
         }
