@@ -30,37 +30,44 @@ public class APISession<T: Endpoint>{
   }
   
   
-  private func task<R: ResponseResult>(for endpoint: T, completion: @escaping (R) -> Void) -> URLSessionTask {
+  private func withTask(for endpoint: T, completion: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionTask {
     let task = session.dataTask(with: endpoint.makeRequest(host: host)) { data, res, error in
-      completion(R(data: data, response: res, error: error))
+      completion(data, res, error)
     }
     task.resume()
     return task
   }
   
   
-  @discardableResult public func dataTask(for endpoint: T, completion: @escaping (DataResponse)->Void = {_ in}) -> URLSessionTask {
-    return task(for: endpoint, completion: completion)
+  @discardableResult public func dataTask(for endpoint: T, completion: @escaping (Result<DataResponse>)->Void = {_ in}) -> URLSessionTask {
+    return withTask(for: endpoint) { data, res, error in
+      completion(ResultFactory.makeDataResponseResult(data: data, response: res, error: error))
+    }
   }
 
 
-  @discardableResult public func jsonObjectTask(for endpoint: T, completion: @escaping (JSONObjectResponse)->Void = {_ in}) -> URLSessionTask {
-    return task(for: endpoint, completion: completion)
+  @discardableResult public func jsonObjectTask(for endpoint: T, completion: @escaping (Result<JSONObjectResponse>)->Void = {_ in}) -> URLSessionTask {
+    return withTask(for: endpoint) { data, res, error in
+      completion(ResultFactory.makeJSONObjectResponseResult(data: data, response: res, error: error))
+    }
   }
 
 
-  @discardableResult public func jsonArrayTask(for endpoint: T, completion: @escaping (JSONArrayResponse)->Void = {_ in}) -> URLSessionTask {
-    return task(for: endpoint, completion: completion)
+  @discardableResult public func jsonArrayTask(for endpoint: T, completion: @escaping (Result<JSONArrayResponse>)->Void = {_ in}) -> URLSessionTask {
+    return withTask(for: endpoint) { data, res, error in
+      completion(ResultFactory.makeJSONArrayResponseResult(data: data, response: res, error: error))
+    }
   }
   
   
-  @discardableResult public func graphTask(for endpoint: T, objectName: String, completion: @escaping (JSONObjectResponse)->Void = {_ in}) -> URLSessionTask {
-    return task(for: endpoint) { (res: JSONObjectResponse) in
-      switch res {
-      case .response(200, let json):
+  @discardableResult public func graphTask(for endpoint: T, objectName: String, completion: @escaping (Result<JSONObjectResponse>)->Void = {_ in}) -> URLSessionTask {
+    return withTask(for: endpoint) { data, res, error in
+      let result = ResultFactory.makeJSONObjectResponseResult(data: data, response: res, error: error)
+      switch result {
+      case .success(200, let json):
         completion(Helper.parseGraphJSON(json, objectName: objectName))
       default: //it's an .error or a non-200 response
-        completion(res)
+        completion(result)
       }
     }
   }
@@ -86,7 +93,7 @@ private enum Helper {
   }
   
   
-  static func parseGraphJSON(_ json: JSONObject, objectName: String) -> JSONObjectResponse {
+  static func parseGraphJSON(_ json: JSONObject, objectName: String) -> Result<JSONObjectResponse> {
     let object = (json["data"] as? JSONObject)?[objectName] as? JSONObject
     let errorMessage = (json["errors"] as? [JSONObject])?.first?["message"] as? String
     let hasObject = (json["data"] as? JSONObject)?.keys.contains(objectName) ?? false
@@ -99,7 +106,7 @@ private enum Helper {
       return .failure(GraphQLError.syntaxOrValidation(message: message))
     
     case (true, let obj?, nil):
-      return .response(status: 200, jsonObject: obj)
+      return .success(status: 200, jsonObject: obj)
     
     default:
       return .failure(GraphQLError.unknown)

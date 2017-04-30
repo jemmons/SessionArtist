@@ -9,71 +9,53 @@ public enum ResponseError: Error {
 
 
 
-internal protocol ResponseResult {
-  init(data: Data?, response: URLResponse?, error: Error?)
-}
+public typealias JSONObjectResponse = (status: Int, jsonObject: JSONObject)
+public typealias JSONArrayResponse = (status: Int, jsonArray: JSONArray)
+public typealias DataResponse = (status: Int, data: Data)
 
 
 
-public enum JSONObjectResponse: ResponseResult {
-  case response(status: Int, jsonObject: JSONObject)
-  case failure(Error)
-  
-  
-  public init(data: Data?, response: URLResponse?, error: Error?) {
+internal enum ResultFactory {
+   static func makeJSONObjectResponseResult(data: Data?, response: URLResponse?, error: Error?) -> Result<JSONObjectResponse> {
     switch ResponseParser(data: data, response: response, error: error) {
     case let .error(e):
-      self = .failure(e)
+      return .failure(e)
     case let .empty(s):
-      self = .response(status: s, jsonObject: [:])
+      return .success(status: s, jsonObject: [:])
     case let .data(d, s):
       do{
-        self = .response(status: s, jsonObject: try JSONHelper.jsonObject(from: d))
+        return .success(status: s, jsonObject: try JSONHelper.jsonObject(from: d))
       } catch let e {
-        self = .failure(e)
+        return .failure(e)
       }
     }
   }
-}
-
-
-
-public enum JSONArrayResponse: ResponseResult {
-  case response(status: Int, jsonArray: JSONArray)
-  case failure(Error)
   
   
-  public init(data: Data?, response: URLResponse?, error: Error?) {
+  static func makeJSONArrayResponseResult(data: Data?, response: URLResponse?, error: Error?) -> Result<JSONArrayResponse> {
     switch ResponseParser(data: data, response: response, error: error) {
     case let .error(e):
-      self = .failure(e)
+      return .failure(e)
     case let .empty(s):
-      self = .response(status: s, jsonArray: [])
+      return .success(status: s, jsonArray: [])
     case let .data(d, s):
       do{
-        self = .response(status: s, jsonArray: try JSONHelper.jsonArray(from: d))
+        return .success(status: s, jsonArray: try JSONHelper.jsonArray(from: d))
       } catch let e {
-        self = .failure(e)
+        return .failure(e)
       }
     }
   }
-}
-
-
-
-public enum DataResponse: ResponseResult {
-  case response(status: Int, data: Data)
-  case failure(Error)
   
   
-  public init(data: Data?, response: URLResponse?, error: Error?) {
+  static func makeDataResponseResult(data: Data?, response: URLResponse?, error: Error?) -> Result<DataResponse> {
     switch ResponseParser(data: data, response: response, error: error) {
     case let .error(e):
-      self = .failure(e)
+      return .failure(e)
     case let .empty(s):
-      self = .response(status: s, data: Data())
+      return .success(status: s, data: Data())
     case let .data(d, s):
-      self = .response(status: s, data: d)
+      return .success(status: s, data: d)
     }
   }
 }

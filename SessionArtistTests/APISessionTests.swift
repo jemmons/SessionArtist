@@ -62,22 +62,22 @@ class APISessionTests: XCTestCase {
     FakeServer.runWith { server in
       server.add(["GET /get", "POST /post", "PUT /put", "DELETE /delete"])
       API.perfidy.dataTask(for: .getEndpoint) {
-        if case .response(200, _) = $0 {
+        if case .success(200, _) = $0 {
           shouldGet.fulfill()
         }
       }
       API.perfidy.dataTask(for: .postEndpoint) {
-        if case .response(200, _) = $0 {
+        if case .success(200, _) = $0 {
           shouldPost.fulfill()
         }
       }
       API.perfidy.dataTask(for: .putEndpoint) {
-        if case .response(200, _) = $0 {
+        if case .success(200, _) = $0 {
           shouldPut.fulfill()
         }
       }
       API.perfidy.dataTask(for: .deleteEndpoint) {
-        if case .response(200, _) = $0 {
+        if case .success(200, _) = $0 {
           shouldDelete.fulfill()
         }
       }
@@ -93,7 +93,7 @@ class APISessionTests: XCTestCase {
     FakeServer.runWith { server in
       server.add("/get", response: "foo")
       API.perfidy.dataTask(for: .getEndpoint) { res in
-        if case .response(200, let d) = res {
+        if case .success(200, let d) = res {
           XCTAssertEqual(String(data: d, encoding: .utf8), "foo")
           shouldGetData.fulfill()
         }
@@ -121,7 +121,7 @@ class APISessionTests: XCTestCase {
       server.add("/get", response: ["foo": "bar"])
       server.add("POST /post", response: "foobar")
       API.perfidy.jsonObjectTask(for: .getEndpoint) { res in
-        if case .response(200, let j) = res {
+        if case .success(200, let j) = res {
           XCTAssertEqual(j as! [String: String], ["foo": "bar"])
           shouldGetJSON.fulfill()
         }
@@ -155,7 +155,7 @@ class APISessionTests: XCTestCase {
       server.add("/get", response: try! Response(jsonArray: ["foo", "bar"]))
       server.add("POST /post", response: "foobar")
       API.perfidy.jsonArrayTask(for: .getEndpoint) { res in
-        if case .response(200, let j) = res {
+        if case .success(200, let j) = res {
           XCTAssertEqual(j as! [String], ["foo", "bar"])
           shouldGetJSON.fulfill()
         }
@@ -244,7 +244,7 @@ class APISessionTests: XCTestCase {
       server.add("POST /graph", response: ["data": ["my_object": ["foo": "bar"]]])
       
       API.perfidy.graphTask(for: .graph, objectName: "my_object") { res in
-        if case .response(200, let json) = res{
+        if case .success(200, let json) = res{
           XCTAssertEqual(json["foo"] as! String, "bar")
           shouldGetResponse.fulfill()
         }
