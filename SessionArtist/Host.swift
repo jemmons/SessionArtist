@@ -16,6 +16,29 @@ public struct Host {
 
 
 public extension Host {
+  var url: URL {
+    return baseURL
+  }
+  
+  
+  var headers: [HTTPHeaderField: String] {
+    var newHeaders: [HTTPHeaderField: String] = [:]
+    session.configuration.httpAdditionalHeaders?.forEach { key, value in
+      if
+        let someKey = key as? String,
+        let someValue = value as? String {
+        newHeaders[HTTPHeaderField(string: someKey)] = someValue
+      }
+    }
+    return newHeaders
+  }
+  
+  
+  var timeout: TimeInterval {
+    return session.configuration.timeoutIntervalForRequest
+  }
+  
+  
   //MARK: - ENDPOINT REQUEST
   func request(_ endpoint: EndpointConvertible) -> Request {
     return Request(session: session, request: endpoint.endpoint.request(from: baseURL))

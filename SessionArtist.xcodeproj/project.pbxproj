@@ -10,6 +10,7 @@
 		7308DEB01EB629FF00666184 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7308DEAF1EB629FF00666184 /* Result.swift */; };
 		730AC0C21E56624C007DD57B /* HTTPHeaderField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730AC0C11E56624C007DD57B /* HTTPHeaderField.swift */; };
 		730AC0C41E575920007DD57B /* HTTPHeaderKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730AC0C31E575920007DD57B /* HTTPHeaderKeyTests.swift */; };
+		7319659D2044EC270065828F /* HostTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7319659C2044EC270065828F /* HostTests.swift */; };
 		731DF3B71F8E98290058F265 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731DF3B61F8E98290058F265 /* Request.swift */; };
 		7322E4401E12FD12003A6410 /* SessionArtist.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7322E4361E12FD12003A6410 /* SessionArtist.framework */; };
 		73240D9F1F8E8F250078615F /* GetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73240D9E1F8E8F250078615F /* GetTests.swift */; };
@@ -45,6 +46,7 @@
 		7308DEAF1EB629FF00666184 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		730AC0C11E56624C007DD57B /* HTTPHeaderField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPHeaderField.swift; sourceTree = "<group>"; };
 		730AC0C31E575920007DD57B /* HTTPHeaderKeyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = HTTPHeaderKeyTests.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		7319659C2044EC270065828F /* HostTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostTests.swift; sourceTree = "<group>"; };
 		731DF3B61F8E98290058F265 /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
 		7322E4361E12FD12003A6410 /* SessionArtist.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SessionArtist.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7322E43A1E12FD12003A6410 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 		7322E4431E12FD12003A6410 /* SessionArtistTests */ = {
 			isa = PBXGroup;
 			children = (
+				7319659C2044EC270065828F /* HostTests.swift */,
 				73240DA01F8E8F960078615F /* RequestTests.swift */,
 				7396F62C1F9114D8004C9A1B /* ResponseTests.swift */,
 				73240D9E1F8E8F250078615F /* GetTests.swift */,
@@ -289,6 +292,7 @@
 				730AC0C41E575920007DD57B /* HTTPHeaderKeyTests.swift in Sources */,
 				736227351F855FD500A2EC21 /* ParamsTests.swift in Sources */,
 				7344E2751E15B38E0043D88C /* EndpointTests.swift in Sources */,
+				7319659D2044EC270065828F /* HostTests.swift in Sources */,
 				73FF56BC1F91510B0040BA3A /* PostTests.swift in Sources */,
 				73240D9F1F8E8F250078615F /* GetTests.swift in Sources */,
 				73FF56C01F9508F80040BA3A /* DeleteTests.swift in Sources */,
@@ -485,7 +489,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Carthage/Build/iOS";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mcmxcix.SessionArtistTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -503,7 +507,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Carthage/Build/iOS";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mcmxcix.SessionArtistTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
