@@ -75,7 +75,7 @@ private extension Endpoint {
     
     comps.appendPathComponent(path)
     
-    if case .get = method {
+    if [.get, .postQuery].contains(method) {
       comps.queryItems = params?.makeQuery()
     }
     

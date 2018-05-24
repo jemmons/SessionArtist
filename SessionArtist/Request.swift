@@ -13,6 +13,13 @@ public class Request {
   
   private let session: URLSession
   private let request: URLRequest
+  public var urlRequest: URLRequest {
+    //Note the request we actually want is the one that will be send by the session — that is `request` merged with the properties of `session`.
+    guard let newRequest = session.dataTask(with: request).currentRequest else {
+      fatalError("Couldn't retrieve request from task explicitly created with it.")
+    }
+    return newRequest
+  }
 
   
   internal init(session: URLSession, request: URLRequest) {

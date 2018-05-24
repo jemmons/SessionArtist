@@ -6,19 +6,42 @@ import Perfidy
 
 
 class RequestTests: XCTestCase {
-  let fakeHost = Host(baseURL: FakeServer.defaultURL)
+  let fakeHost = Host(baseURL: FakeServer.defaultURL, defaultHeaders: [.other("foo"): "bar"])
   
   func testRequestHeaders() {
     let endpoint = Endpoint(method: .get, path: "/test", headers: [.other("baz"): "thud"])
     doFakeRequest(endpoint: endpoint) { req in
-      XCTAssertEqual(req.allHTTPHeaderFields!["baz"], "thud")
+      XCTAssertEqual("bar", req.allHTTPHeaderFields!["foo"], "Host headers")
+      XCTAssertEqual("thud", req.allHTTPHeaderFields!["baz"], "Endpoint headers")
     }
+  }
+  
+  
+  func testURLRequestParam() {
+    let endpoint = Endpoint(method: .trace, path: "/test", headers: [.other("baz"): "thud"])
+    let req = fakeHost.request(endpoint).urlRequest
+    XCTAssert(req.url!.absoluteString.starts(with: FakeServer.defaultURL.absoluteString))
+    XCTAssertEqual( "/test", req.url!.path)
+    XCTAssertEqual("TRACE", req.httpMethod)
+    XCTAssertEqual("bar", req.allHTTPHeaderFields!["foo"], "Host headers")
+    XCTAssertEqual("thud", req.allHTTPHeaderFields!["baz"], "Endpoint headers")
   }
   
   
   func testRequestGetEndpoint() {
     let params = Params([URLQueryItem(name: "foo", value: "bar")])
     let endpoint = Endpoint(method: .get, path: "/test", params: params)
+    
+    doFakeRequest(endpoint: endpoint) { req in
+      XCTAssertEqual(req.url!.query, "foo=bar")
+      XCTAssertNil(req.allHTTPHeaderFields!["Content-Type"])
+    }
+  }
+  
+  
+  func testRequestPostQueryEndpoint() {
+    let params = Params([URLQueryItem(name: "foo", value: "bar")])
+    let endpoint = Endpoint(method: .postQuery, path: "/test", params: params)
     
     doFakeRequest(endpoint: endpoint) { req in
       XCTAssertEqual(req.url!.query, "foo=bar")
