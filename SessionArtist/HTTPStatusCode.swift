@@ -67,7 +67,8 @@ public enum HTTPStatusCode: Int {
   uriTooLong,
   unsupportedMediaType,
   rangeNotSatisfiable,
-  expectationFailed
+  expectationFailed,
+  imATeapot
   /// A "client error" status code.
   case misdirectedRequest = 421,
   unprocessableEntity,
