@@ -102,11 +102,7 @@ private enum Helper {
   static func dataHandler<T>(from handler: @escaping (Result<(code: HTTPStatusCode, json: T)>) -> Void, factory: @escaping (Data) throws -> T) -> Request.DataCompletionHandler {
     return { (res: Result<(code: HTTPStatusCode, contentType: String?, body: Data)>) -> Void in
       let jsonResult = res.flatMap { (code, contentType, body) -> Result<(code: HTTPStatusCode, json: T)> in
-        do {
-          return .success((code: code, json: try factory(body)))
-        } catch {
-          return .failure(error)
-        }
+        return .success((code: code, json: try factory(body)))
       }
       handler(jsonResult)
     }

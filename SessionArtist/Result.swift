@@ -15,14 +15,41 @@ public enum Result<T> {
   public init(_ error: Error) {
     self = .failure(error)
   }
-  
-  
-  public func flatMap<U>(transform f: (T)->Result<U>) -> Result<U> {
+}
+
+
+
+public extension Result {
+  func map<U>(transform: (T)->U) -> Result<U> {
     switch self {
     case .success(let t):
-      return f(t)
+      return .success(transform(t))
     case .failure(let e):
-      return Result<U>.failure(e)
+      return .failure(e)
+    }
+  }
+  
+  
+  func flatMap<U>(transform: (T) throws -> Result<U>) -> Result<U> {
+    switch self {
+    case .success(let t):
+      do {
+        return try transform(t)
+      } catch {
+        return .failure(error)
+      }
+    case .failure(let e):
+      return .failure(e)
+    }
+  }
+
+  
+  func resolve() throws -> T {
+    switch self {
+    case .success(let t):
+      return t
+    case .failure(let e):
+      throw e
     }
   }
 }

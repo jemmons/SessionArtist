@@ -30,6 +30,7 @@
 		73FF56BE1F9506A90040BA3A /* PutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FF56BD1F9506A90040BA3A /* PutTests.swift */; };
 		73FF56C01F9508F80040BA3A /* DeleteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FF56BF1F9508F80040BA3A /* DeleteTests.swift */; };
 		73FF56C21F9509E50040BA3A /* EndpointConvertibleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FF56C11F9509E50040BA3A /* EndpointConvertibleTests.swift */; };
+		C1544C932121EC9000648A84 /* ResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1544C922121EC9000648A84 /* ResultTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 		73FF56BD1F9506A90040BA3A /* PutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PutTests.swift; sourceTree = "<group>"; };
 		73FF56BF1F9508F80040BA3A /* DeleteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteTests.swift; sourceTree = "<group>"; };
 		73FF56C11F9509E50040BA3A /* EndpointConvertibleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointConvertibleTests.swift; sourceTree = "<group>"; };
+		C1544C922121EC9000648A84 /* ResultTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +148,7 @@
 				73FF56C11F9509E50040BA3A /* EndpointConvertibleTests.swift */,
 				736227341F855FD500A2EC21 /* ParamsTests.swift */,
 				730AC0C31E575920007DD57B /* HTTPHeaderKeyTests.swift */,
+				C1544C922121EC9000648A84 /* ResultTests.swift */,
 				7322E4461E12FD12003A6410 /* Info.plist */,
 			);
 			path = SessionArtistTests;
@@ -295,6 +298,7 @@
 				7319659D2044EC270065828F /* HostTests.swift in Sources */,
 				73FF56BC1F91510B0040BA3A /* PostTests.swift in Sources */,
 				73240D9F1F8E8F250078615F /* GetTests.swift in Sources */,
+				C1544C932121EC9000648A84 /* ResultTests.swift in Sources */,
 				73FF56C01F9508F80040BA3A /* DeleteTests.swift in Sources */,
 				73FF56C21F9509E50040BA3A /* EndpointConvertibleTests.swift in Sources */,
 				73FF56BE1F9506A90040BA3A /* PutTests.swift in Sources */,
