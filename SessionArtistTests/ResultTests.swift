@@ -15,6 +15,14 @@ class ResultTests: XCTestCase {
   }
   
   
+  func testPredicates() {
+    XCTAssert(success.isSuccess)
+    XCTAssert(failure.isFailure)
+    XCTAssertFalse(success.isFailure)
+    XCTAssertFalse(failure.isSuccess)
+  }
+  
+  
   func testInitializer() {
     switch Result("foo") {
     case .success("foo"):
@@ -83,6 +91,66 @@ class ResultTests: XCTestCase {
   }
 
   
+  func testAsyncFlatMapToSuccess() {
+    let expectedSuccessFromSuccess = expectation(description: "Waiting for successful result")
+    let expectedFailureFromFailure = expectation(description: "Waiting for failure result")
+
+    let transform: (Int, (Result<String>)->Void)->Void = { i, completion in
+      completion(.success(String(i)))
+    }
+    
+    success.asyncFlatMap(asyncTransform: transform) { res in
+      switch res {
+      case .success("42"):
+        expectedSuccessFromSuccess.fulfill()
+      default:
+        XCTFail()
+      }
+    }
+    
+    failure.asyncFlatMap(asyncTransform: transform) { res in
+      switch res {
+      case .failure(E.original):
+        expectedFailureFromFailure.fulfill()
+      default:
+        XCTFail()
+      }
+    }
+    
+    wait(for: [expectedSuccessFromSuccess, expectedFailureFromFailure], timeout: 0)
+  }
+  
+  
+  func testAsyncFlatMapToFailure() {
+    let expectedFailureFromSuccess = expectation(description: "Waiting for new failure")
+    let expectedFailureFromFailure = expectation(description: "Waiting for originnal failure")
+    
+    let transform: (Int, (Result<String>)->Void)->Void = { i, completion in
+      completion(.failure(E.new))
+    }
+    
+    success.asyncFlatMap(asyncTransform: transform) { res in
+      switch res {
+      case .failure(E.new):
+        expectedFailureFromSuccess.fulfill()
+      default:
+        XCTFail()
+      }
+    }
+    
+    failure.asyncFlatMap(asyncTransform: transform) { res in
+      switch res {
+      case .failure(E.original):
+        expectedFailureFromFailure.fulfill()
+      default:
+        XCTFail()
+      }
+    }
+    
+    wait(for: [expectedFailureFromSuccess, expectedFailureFromFailure], timeout: 0)
+  }
+  
+  
   func testMap() {
     switch success.map(transform: { String($0) }) {
     case .success("42"):
@@ -133,5 +201,137 @@ class ResultTests: XCTestCase {
     } catch {
       XCTFail()
     }
+  }
+  
+  
+  func testFlatRouteToSuccess() {
+    let expectedSuccessFromSuccess = expectation(description: "Waiting for success.")
+    let expectedFailureFromFailure = expectation(description: "Waiting for failure.")
+
+    let successContinuation: (Result<String>)->Void = { res in
+      switch res {
+      case .success("42"):
+        expectedSuccessFromSuccess.fulfill()
+      default:
+        XCTFail()
+      }
+    }
+    
+    let failureContinuation: (Result<String>)->Void = { res in
+      switch res {
+      case .failure(E.original):
+        expectedFailureFromFailure.fulfill()
+      default:
+        XCTFail()
+      }
+    }
+    
+    let adaptor: (Int)->Result<String> = { i in
+      return .success(String(i))
+    }
+    
+    Result.flatRoute(continuation: successContinuation, adaptor: adaptor)(success)
+    Result.flatRoute(continuation: failureContinuation, adaptor: adaptor)(failure)
+
+    wait(for: [expectedSuccessFromSuccess, expectedFailureFromFailure], timeout: 0)
+  }
+  
+  
+  func testFlatRouteToFailure() {
+    let expectedFailureFromSuccess = expectation(description: "Waiting for failure from success.")
+    let expectedFailureFromFailure = expectation(description: "Waiting for failure.")
+    
+    let successContinuation: (Result<String>)->Void = { res in
+      switch res {
+      case .failure(E.new):
+        expectedFailureFromSuccess.fulfill()
+      default:
+        XCTFail()
+      }
+    }
+    
+    let failureContinuation: (Result<String>)->Void = { res in
+      switch res {
+      case .failure(E.original):
+        expectedFailureFromFailure.fulfill()
+      default:
+        XCTFail()
+      }
+    }
+    
+    let adaptor: (Int)->Result<String> = { i in
+      return .failure(E.new)
+    }
+    
+    Result.flatRoute(continuation: successContinuation, adaptor: adaptor)(success)
+    Result.flatRoute(continuation: failureContinuation, adaptor: adaptor)(failure)
+    
+    wait(for: [expectedFailureFromSuccess, expectedFailureFromFailure], timeout: 0)
+  }
+  
+  
+  func testAsyncFlatRouteToSuccess() {
+    let expectedSuccessFromSuccess = expectation(description: "Waiting for success.")
+    let expectedFailureFromFailure = expectation(description: "Waiting for failure.")
+    
+    let successContinuation: (Result<String>)->Void = { res in
+      switch res {
+      case .success("42"):
+        expectedSuccessFromSuccess.fulfill()
+      default:
+        XCTFail()
+      }
+    }
+    
+    let failureContinuation: (Result<String>)->Void = { res in
+      switch res {
+      case .failure(E.original):
+        expectedFailureFromFailure.fulfill()
+      default:
+        XCTFail()
+      }
+    }
+    
+    let adaptor: (Int, (Result<String>)->Void)->Void = { i, completion in
+      completion(.success(String(i)))
+    }
+    
+    Result.asyncFlatRoute(continuation: successContinuation, asyncAdaptor: adaptor)(success)
+    Result.asyncFlatRoute(continuation: failureContinuation, asyncAdaptor: adaptor)(failure)
+    
+    wait(for: [expectedSuccessFromSuccess, expectedFailureFromFailure], timeout: 0)
+  }
+  
+  
+  func testAsyncFlatRouteToFailure() {
+    let expectedFailureFromSuccess = expectation(description: "Waiting for failure from success.")
+    let expectedFailureFromFailure = expectation(description: "Waiting for failure.")
+    
+    let successContinuation: (Result<String>)->Void = { res in
+      switch res {
+      case .failure(E.new):
+        expectedFailureFromSuccess.fulfill()
+      default:
+        XCTFail()
+      }
+    }
+    
+    let failureContinuation: (Result<String>)->Void = { res in
+      switch res {
+      case .failure(E.original):
+        expectedFailureFromFailure.fulfill()
+      default:
+        XCTFail()
+      }
+    }
+    
+    let adaptor: (Int, (Result<String>)->Void)->Void = { i, completion in
+      completion(.failure(E.new))
+    }
+    
+    Result.asyncFlatRoute(continuation: successContinuation, asyncAdaptor: adaptor)(success)
+    Result.asyncFlatRoute(continuation: failureContinuation, asyncAdaptor: adaptor)(failure)
+    
+    wait(for: [expectedFailureFromSuccess, expectedFailureFromFailure], timeout: 0)
   }
 }
