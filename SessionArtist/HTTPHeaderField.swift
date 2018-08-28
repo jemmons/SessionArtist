@@ -37,6 +37,7 @@ extension HTTPHeaderField: CustomStringConvertible {
 
 
 extension HTTPHeaderField: ExpressibleByStringLiteral {
+  // swiftlint:disable:next cyclomatic_complexity
   public init(string: String) {
     switch string.lowercased() {
     case "accept": self = .accept
@@ -59,12 +60,18 @@ extension HTTPHeaderField: ExpressibleByStringLiteral {
     default: self = .other(string)
     }
   }
+
+  
   public init(stringLiteral value: String) {
     self.init(string: value)
   }
+  
+  
   public init(unicodeScalarLiteral value: String) {
     self.init(stringLiteral: value)
   }
+  
+  
   public init(extendedGraphemeClusterLiteral value: String) {
     self.init(stringLiteral: value)
   }
@@ -73,7 +80,7 @@ extension HTTPHeaderField: ExpressibleByStringLiteral {
 
 
 extension HTTPHeaderField: Equatable {
-  public static func ==(lhs: HTTPHeaderField, rhs: HTTPHeaderField) -> Bool {
+  public static func == (lhs: HTTPHeaderField, rhs: HTTPHeaderField) -> Bool {
     return lhs.description.compare(rhs.description, options: [.caseInsensitive], range: nil, locale: Locale(identifier: "en_US_POSIX")) == .orderedSame
   }
 }

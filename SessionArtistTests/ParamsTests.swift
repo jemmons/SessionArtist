@@ -32,14 +32,14 @@ class ParamsTests: XCTestCase {
     let subject = Params.json(json)
     
     let query = subject.makeQuery()
-    XCTAssert(query.contains { $0.name == "foo" && $0.value == "bar" })
-    XCTAssert(query.contains { $0.name == "array[]" && $0.value == "1" })
-    XCTAssert(query.contains { $0.name == "array[]" && $0.value == "2" })
-    XCTAssert(query.contains { $0.name == "array[]" && $0.value == "3" })
-    XCTAssert(query.contains { $0.name == "hash[a][]" && $0.value == "1" })
-    XCTAssert(query.contains { $0.name == "hash[a][]" && $0.value == "2" })
-    XCTAssert(query.contains { $0.name == "hash[b][]" && $0.value == "3" })
-    XCTAssert(query.contains { $0.name == "hash[b][]" && $0.value == "4" })
+    XCTAssert(query.contains(URLQueryItem(name: "foo", value: "bar")))
+    XCTAssert(query.contains(URLQueryItem(name: "array[]", value: "1")))
+    XCTAssert(query.contains(URLQueryItem(name: "array[]", value: "2")))
+    XCTAssert(query.contains(URLQueryItem(name: "array[]", value: "3")))
+    XCTAssert(query.contains(URLQueryItem(name: "hash[a][]", value: "1")))
+    XCTAssert(query.contains(URLQueryItem(name: "hash[a][]", value: "2")))
+    XCTAssert(query.contains(URLQueryItem(name: "hash[b][]", value: "3")))
+    XCTAssert(query.contains(URLQueryItem(name: "hash[b][]", value: "4")))
     
     let dataString = String(data: subject.makeData(), encoding: .utf8)!
     XCTAssertNotNil(dataString.range(of: "\"foo\":\"bar\""))

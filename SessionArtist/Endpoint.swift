@@ -3,7 +3,7 @@ import Foundation
 
 
 public protocol EndpointConvertible {
-  var endpoint: Endpoint {get}
+  var endpoint: Endpoint { get }
 }
 
 
@@ -121,7 +121,3 @@ private extension URLComponents {
     return String(trimmed.dropFirst())
   }
 }
-
-
-
-

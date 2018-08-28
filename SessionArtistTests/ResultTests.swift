@@ -24,14 +24,14 @@ class ResultTests: XCTestCase {
   
   
   func testInitializer() {
-    switch Result("foo") {
+    switch Result.success("foo") {
     case .success("foo"):
       XCTAssert(true)
     default:
       XCTFail()
     }
     
-    switch Result<String>(E.original) {
+    switch Result<String>.failure(E.original) {
     case .failure(E.original):
       XCTAssert(true)
     default:

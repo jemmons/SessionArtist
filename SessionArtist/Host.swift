@@ -15,6 +15,7 @@ public struct Host {
 }
 
 
+
 public extension Host {
   var url: URL {
     return baseURL
@@ -39,13 +40,13 @@ public extension Host {
   }
   
   
-  //MARK: - ENDPOINT REQUEST
+  // MARK: - ENDPOINT REQUEST
   func request(_ endpoint: EndpointConvertible) -> Request {
     return Request(session: session, request: endpoint.endpoint.request(from: baseURL))
   }
   
   
-  //MARK: - CONVENIENCE REQUESTS
+  // MARK: - CONVENIENCE REQUESTS
   func get(_ path: String, query: [URLQueryItem] = [], headers: [HTTPHeaderField: String] = [:]) -> Request {
     let params = query.isEmpty ? nil : Params(query)
     let endpoint = Endpoint(method: .get, path: path, params: params, headers: headers)
@@ -96,4 +97,3 @@ private enum Helper {
     return URLSession(configuration: config, delegate: nil, delegateQueue: OperationQueue.main)
   }
 }
-

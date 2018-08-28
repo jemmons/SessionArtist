@@ -1,8 +1,11 @@
 import Foundation
 import Medea
 
+
+
 public enum Params {
   case form([URLQueryItem]), json(ValidJSONObject)
+  
   
   public init(_ form: [URLQueryItem]) {
     self = .form(form)
@@ -56,30 +59,32 @@ public enum Params {
 
 private enum Helper {
   static func makeQuery(from json: ValidJSONObject) -> [URLQueryItem] {
-    //Assume it won't throw becasue we're enforcing JSONObject type.
+    // Assume it won't throw becasue we're enforcing JSONObject type.
+    // swiftlint:disable:next force_try
     return try! makeQuery(from: json.value, prefix: nil)
   }
+  
   
   /**
    Generalized version to allow for recursion.
    - throws: `JSONError.unexpectedType` if not called (initially) on a JSONObject.
    */
-  static private func makeQuery(from jsonValue: Any, prefix: String? = nil) throws -> [URLQueryItem] {
+  private static func makeQuery(from jsonValue: Any, prefix: String? = nil) throws -> [URLQueryItem] {
     var items: [URLQueryItem] = []
     
     switch jsonValue {
-    case let d as Dictionary<String, Any>:
-      try d.forEach {
-        let newPrefix = prefix == nil ? $0.key : prefix! + "[\($0.key)]"
-        items.append(contentsOf: try makeQuery(from: $0.value, prefix: newPrefix))
+    case let object as [String: Any]:
+      try object.forEach { key, value in
+        let nextPrefix = prefix?.appending("[\(key)]") ?? key
+        items.append(contentsOf: try makeQuery(from: value, prefix: nextPrefix))
       }
       
-    case let a as Array<Any>:
+    case let array as [Any]:
       guard let somePrefix = prefix else {
         throw(Medea.JSONError.unexpectedType)
       }
-      try a.forEach { it in
-        items.append(contentsOf: try makeQuery(from: it, prefix: somePrefix + "[]"))
+      try array.forEach { element in
+        items.append(contentsOf: try makeQuery(from: element, prefix: somePrefix + "[]"))
       }
       
     default:

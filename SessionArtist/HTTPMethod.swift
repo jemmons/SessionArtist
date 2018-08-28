@@ -20,6 +20,7 @@ public enum HTTPMethod {
   /// This is a hack that behaves just like `post`, but sends params in the query string instead of the body. This can work around bugs such as clients that discard POST bodies before sending (looking at you, `WKWebView`s before iOS 11).
   case postQuery
   
+  
   /// Idempotent request to store the enclosed entity be stored under the a given URL. The REST equivalent of CRUD's "Create" operation.
   case put
   

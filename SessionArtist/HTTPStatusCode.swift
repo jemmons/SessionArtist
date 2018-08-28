@@ -7,17 +7,22 @@ public enum HTTPStatusCode: Int {
   /// The range representing all possible informational status codes.
   public static let informationalRange = 100..<200
   
+  
   /// The range representing all possible success status codes.
   public static let successRange = 200..<300
+  
   
   /// The range representing all possible redirection status codes.
   public static let redirectionRange = 300..<400
   
+  
   /// The range representing all possible client error status codes.
   public static let clientErrorRange = 400..<500
   
+  
   /// The range representing all possible server error status codes.
   public static let serverErrorRange = 500..<600
+  
   
   /// An "informational" status code
   case `continue` = 100,
@@ -38,6 +43,7 @@ public enum HTTPStatusCode: Int {
   /// A "success" status code.
   case imUsed = 226
   
+  
   /// A "redirection" status code.
   case multipleChoices = 300,
   movedPermanently,
@@ -48,6 +54,7 @@ public enum HTTPStatusCode: Int {
   switchProcy,
   temporaryRedirect,
   permanentRedirect
+  
   
   /// A "client error" status code.
   case badRequest = 400,
@@ -179,7 +186,7 @@ public extension HTTPStatusCode {
  }
  ```
  */
-public func ~=(pattern: Int, value: HTTPStatusCode) -> Bool {
+public func ~= (pattern: Int, value: HTTPStatusCode) -> Bool {
   return pattern == value.rawValue
 }
 
@@ -197,7 +204,7 @@ public func ~=(pattern: Int, value: HTTPStatusCode) -> Bool {
  }
  ```
  */
-public func ~=(pattern: CountableRange<Int>, value: HTTPStatusCode) -> Bool {
+public func ~= (pattern: CountableRange<Int>, value: HTTPStatusCode) -> Bool {
   return pattern.contains(value.rawValue)
 }
 
@@ -215,6 +222,6 @@ public func ~=(pattern: CountableRange<Int>, value: HTTPStatusCode) -> Bool {
  }
  ```
  */
-public func ~=(pattern: CountableClosedRange<Int>, value: HTTPStatusCode) -> Bool {
+public func ~= (pattern: CountableClosedRange<Int>, value: HTTPStatusCode) -> Bool {
   return pattern.contains(value.rawValue)
 }
