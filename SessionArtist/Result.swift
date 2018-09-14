@@ -10,15 +10,24 @@ public enum Result<T> {
   case failure(Error)
   
   
-  @available(*, deprecated, message: "Considered harmful. `Result(MyError)` will unexpectedly return a `Result<MyError>.success`." )
+  @available(*, deprecated, message: "Considered harmful. `Result(MyError)` will unexpectedly return a `Result<MyError>.success`. Assign a case directly or use `init(factory:)`." )
   public init(_ value: T) {
     self = .success(value)
   }
   
   
-  @available(*, deprecated, message: "Considered harmful. `Result(MyError)` will unexpectedly return a `Result<MyError>.success`." )
+  @available(*, deprecated, message: "Considered harmful. `Result(MyError)` will unexpectedly return a `Result<MyError>.success`. Assign a case directly or use `init(factory:)`." )
   public init(_ error: Error) {
     self = .failure(error)
+  }
+  
+  
+  public init(factory: () throws -> T) {
+    do {
+      self = try .success(factory())
+    } catch {
+      self = .failure(error)
+    }
   }
 }
 

@@ -37,6 +37,28 @@ class ResultTests: XCTestCase {
     default:
       XCTFail()
     }
+    
+    let stringJSON = try! JSONEncoder().encode(["fourty-two"])
+    let success = Result<[String]> {
+      return try JSONDecoder().decode([String].self, from: stringJSON)
+    }
+    switch success {
+    case .success(["fourty-two"]):
+      XCTAssert(true)
+    default:
+      XCTFail()
+    }
+    
+    let numberJSON = try! JSONEncoder().encode([42])
+    let failure = Result<[String]> {
+      return try PropertyListDecoder().decode([String].self, from: numberJSON)
+    }
+    switch failure {
+    case .failure(DecodingError.dataCorrupted):
+      XCTAssert(true)
+    default:
+      XCTFail()
+    }
   }
   
   
