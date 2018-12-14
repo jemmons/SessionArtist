@@ -6,7 +6,7 @@ import Foundation
  Sum type encapsulating HTTP request methods.
  - Seealso: https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html
  */
-public enum HTTPMethod {
+public enum HTTPMethod: CaseIterable {
   
   
   /// Idempotent request to retrieve whatever information is identified by a given URL. The REST equivalent of CRUD's "Read" operation.
@@ -17,7 +17,7 @@ public enum HTTPMethod {
   case post
   
   
-  /// This is a hack that behaves just like `post`, but sends params in the query string instead of the body. This can work around bugs such as clients that discard POST bodies before sending (looking at you, `WKWebView`s before iOS 11).
+  /// This is a hack that behaves just like `post` but, when interpreted by an `Endpoint`, sends params in the query string instead of the body. This can work around bugs such as clients that discard POST bodies before sending (looking at you, `WKWebView`s before iOS 11).
   case postQuery
   
   
@@ -47,6 +47,15 @@ public enum HTTPMethod {
   
   /// Requests that a set of changes described in the enclosed entity be applied to the resource identified by a given URL. Not frequently used in the context of REST.
   case patch
+  
+  
+  /// Constructs an `HTTPMethod`from a (case insensitive) string or returns `nil`. Note that variations on "POST" will allways return an `HTTPMethod.post` and never an `HTTPMethod.postQuery`.
+  public init?(string: String) {
+    guard let foundMethod = HTTPMethod.allCases.first(where: { string.compare($0.description, options: [.caseInsensitive], range: nil, locale: nil) == .orderedSame }) else {
+      return nil
+    }
+    self = foundMethod
+  }
 }
 
 
