@@ -2,7 +2,7 @@ import Foundation
 
 
 
-public enum HTTPHeaderField {
+public enum HTTPHeaderField: Hashable {
   case accept, acceptCharset, acceptEncoding, acceptLanguage, acceptVersion, authorization, cacheControl, connection, cookie, contentLength, contentMD5, contentType, date, host, origin, referer, userAgent
   case other(String)
 }
@@ -82,13 +82,5 @@ extension HTTPHeaderField: ExpressibleByStringLiteral {
 extension HTTPHeaderField: Equatable {
   public static func == (lhs: HTTPHeaderField, rhs: HTTPHeaderField) -> Bool {
     return lhs.description.compare(rhs.description, options: [.caseInsensitive], range: nil, locale: Locale(identifier: "en_US_POSIX")) == .orderedSame
-  }
-}
-
-
-
-extension HTTPHeaderField: Hashable {
-  public var hashValue: Int {
-    return description.hashValue
   }
 }
