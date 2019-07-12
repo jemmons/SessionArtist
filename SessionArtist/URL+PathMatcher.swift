@@ -3,6 +3,7 @@ import Foundation
 
 
 public extension URL {
+  @available(*, deprecated, message: "This functionality has been moved to `MyNameIsURL` (https://github.com/jemmons/MyNameIsURL)")
   struct Host {
     private let host: String
     
@@ -18,6 +19,7 @@ public extension URL {
   }
   
   
+  @available(*, deprecated, message: "This functionality has been moved to `MyNameIsURL` (https://github.com/jemmons/MyNameIsURL)")
   struct Path {
     private let pathRepresentation: PathRepresentation
 
@@ -43,6 +45,7 @@ public extension URL {
   }
   
   
+  @available(*, deprecated, message: "This functionality has been moved to `MyNameIsURL` (https://github.com/jemmons/MyNameIsURL)")
   struct PathPrefix {
     private let pathPrefixRepresentation: PathRepresentation
     
@@ -68,6 +71,7 @@ public extension URL {
     }
   }
 }
+
 
 
 private enum PathRepresentation {
