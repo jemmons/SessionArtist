@@ -14,10 +14,18 @@ public class Request {
   private let session: URLSession
   private let request: URLRequest
   public var urlRequest: URLRequest {
-    // Note the request we actually want is the one that will be send by the session — that is `request` merged with the properties of `session`.
-    guard let newRequest = session.dataTask(with: request).currentRequest else {
+    // Note the request we actually want is the one that will be sent by the session. That is: `request` merged with the properties of `session` — particularly the `httpAdditionalHeaders` of the `session`'s config.
+    guard var newRequest = session.dataTask(with: request).currentRequest else {
       fatalError("Couldn't retrieve request from task explicitly created with it.")
     }
+
+    // There's a bug in iOS 13/Catalina that doesn't copy the session's `httpAdditionalHeaders` over to a request until the request's task has been `resume`'d. So we have to manually merge the headers, instead.
+    if #available(iOS 13, macOS 10.15, *) {
+      let reqHeaders = newRequest.allHTTPHeaderFields ?? [:]
+      let sessionHeaders = (session.configuration.httpAdditionalHeaders as? [String: String]) ?? [:]
+      newRequest.allHTTPHeaderFields = reqHeaders.merging(sessionHeaders) { reqHeader, _ in reqHeader }
+    }
+
     return newRequest
   }
 
