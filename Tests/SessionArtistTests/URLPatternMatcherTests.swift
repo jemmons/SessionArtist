@@ -5,6 +5,7 @@ import SessionArtist
 
 
 class URLPatternMatcherTests: XCTestCase {
+  @available(*, deprecated)
   func testMatchesHost() {
     switch URL(string: "http://example.com/foo")! {
     case URL.Host("example"),
@@ -20,6 +21,7 @@ class URLPatternMatcherTests: XCTestCase {
   }
   
   
+  @available(*, deprecated)
   func testMatchesPath() {
     switch URL(string: "http://example.com/foo")! {
     case URL.Path("/"),
@@ -34,6 +36,7 @@ class URLPatternMatcherTests: XCTestCase {
   }
 
   
+  @available(*, deprecated)
   func testMatchesComponents() {
     switch URL(string: "http://example.com/foo/bar")! {
     case URL.Path(["foo", "bar"]):
@@ -79,6 +82,7 @@ class URLPatternMatcherTests: XCTestCase {
   }
 
   
+  @available(*, deprecated)
   func testMatchesPathPrefix() {
     let subject = URL(string: "http://example.com/foo/bar")!
     guard case URL.PathPrefix("/") = subject else {
@@ -110,6 +114,7 @@ class URLPatternMatcherTests: XCTestCase {
   }
   
   
+  @available(*, deprecated)
   func testMatchesComponentsPrefix() {
     let foobar = URL(string: "http://example.com/foo/bar")!
     guard case URL.PathPrefix([]) = foobar else {
