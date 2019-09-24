@@ -79,7 +79,7 @@ class RequestTests: XCTestCase {
     
     doFakeRequest(endpoint: endpoint) { req in
       XCTAssertNil(req.url!.query)
-      XCTAssert(req.httpBody!.isEmpty)
+      XCTAssertNil(req.httpBody)
     }
   }
   
