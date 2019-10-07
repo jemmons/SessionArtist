@@ -4,11 +4,11 @@ import Medea
 
 
 public class Request {
-  public typealias DataCompletionHandler = (Result<(code: HTTPStatusCode, contentType: String?, body: Data)>) -> Void
-  public typealias JSONCompletionHandler = (Result<(code: HTTPStatusCode, json: AnyJSON)>) -> Void
-  public typealias JSONObjectCompletionHandler = (Result<(code: HTTPStatusCode, json: JSONObject)>) -> Void
-  public typealias JSONArrayCompletionHandler = (Result<(code: HTTPStatusCode, json: JSONArray)>) -> Void
-  public typealias TextCompletionHandler = (Result<(code: HTTPStatusCode, text: String)>) -> Void
+  public typealias DataCompletionHandler = (Result<(code: HTTPStatusCode, contentType: String?, body: Data), Error>) -> Void
+  public typealias JSONCompletionHandler = (Result<(code: HTTPStatusCode, json: AnyJSON), Error>) -> Void
+  public typealias JSONObjectCompletionHandler = (Result<(code: HTTPStatusCode, json: JSONObject), Error>) -> Void
+  public typealias JSONArrayCompletionHandler = (Result<(code: HTTPStatusCode, json: JSONArray), Error>) -> Void
+  public typealias TextCompletionHandler = (Result<(code: HTTPStatusCode, text: String), Error>) -> Void
 
   
   private let session: URLSession
@@ -112,10 +112,14 @@ private enum Helper {
   }
 
 
-  static func dataHandler<T>(from handler: @escaping (Result<(code: HTTPStatusCode, json: T)>) -> Void, factory: @escaping (Data) throws -> T) -> Request.DataCompletionHandler {
-    return { (res: Result<(code: HTTPStatusCode, contentType: String?, body: Data)>) -> Void in
-      let jsonResult = res.flatMap { code, _, body -> Result<(code: HTTPStatusCode, json: T)> in
-        return .success((code: code, json: try factory(body)))
+  static func dataHandler<T>(from handler: @escaping (Result<(code: HTTPStatusCode, json: T), Error>) -> Void, factory: @escaping (Data) throws -> T) -> Request.DataCompletionHandler {
+    return { (res: Result<(code: HTTPStatusCode, contentType: String?, body: Data), Error>) -> Void in
+      let jsonResult = res.flatMap { code, _, body -> Result<(code: HTTPStatusCode, json: T), Error> in
+        do {
+          return .success((code: code, json: try factory(body)))
+        } catch {
+          return .failure(error)
+        }
       }
       handler(jsonResult)
     }
