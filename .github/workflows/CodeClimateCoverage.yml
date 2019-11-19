@@ -1,0 +1,32 @@
+name: master # Also the name of the badge displayed in README.md
+
+on: 
+  push:
+    branches:
+      - master
+
+jobs:
+  upload_code_coverage:
+    name: Upload Code Coverage
+    runs-on: macOS-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Fetch CodeClimate Test Reporter 
+      run: |
+        curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-darwin-amd64 > ./cc-test-reporter
+        chmod +x ./cc-test-reporter
+    - name: Generate Project # swift build doesn't report coverage in a format CC understands, so we generage a project and build with xcode.
+      run: swift package generate-xcodeproj --enable-code-coverage
+    - name: Test Reporter Before 
+      run: ./cc-test-reporter before-build
+    - name: Build Tests
+      run: xcodebuild test -scheme SessionArtist-Package -resultBundleVersion 3 -resultBundlePath ./build.xcresult
+    - name: Parse Coverage
+      run: xcrun xccov view --report --json ./build.xcresult > coverage.json
+    - name: Test Reporter After
+      run: ./cc-test-reporter after-build -t xccov -r ${{ secrets.CODECLIMATE_TOKEN }}
+      env:
+        GIT_COMMIT_SHA: ${{github.sha}}
+        GIT_BRANCH: master
