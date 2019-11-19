@@ -24,7 +24,7 @@ jobs:
     - name: Build Tests
       run: xcodebuild test -scheme SessionArtist-Package -resultBundleVersion 3 -resultBundlePath ./build.xcresult
     - name: Parse Coverage
-      run: xcrun xccov view --report --json ./build.xcresult > coverage.json
+      run: xcrun xccov view --report --json --files-for-target SessionArtist.framework ./build.xcresult > coverage.json
     - name: Test Reporter After
       run: ./cc-test-reporter after-build -t xccov -r ${{ secrets.CODECLIMATE_TOKEN }}
       env:

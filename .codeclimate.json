@@ -12,6 +12,7 @@
   },
   "exclude_patterns": [
     "docs/",
-    "Tests/"
+    "Tests/",
+    ".build/"
   ]
 }
