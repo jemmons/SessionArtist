@@ -7,26 +7,60 @@ on:
 
 jobs:
   upload_code_coverage:
+
     name: Upload Code Coverage
     runs-on: macOS-latest
 
     steps:
     - name: Checkout
       uses: actions/checkout@v1
+
+    - name: Shared Values
+      id: shared
+      uses: jemmons/SharedValuesAction@v1
+
+    - name: Cache CodeClimate Test Reporter
+      id: cc_cache
+      uses: actions/cache@v1
+      with:
+        path: ${{ steps.shared.outputs.ccDirectory }}
+        key: CCTestReporter-${{ runner.OS }}-CC${{ steps.shared.outputs.ccVersion }}
+        restore-keys: |
+          CCTestReporter-${{ runner.OS }}-
+
     - name: Fetch CodeClimate Test Reporter 
+      if: steps.cc_cache.outputs.cache-hit != 'true'
       run: |
-        curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-darwin-amd64 > ./cc-test-reporter
-        chmod +x ./cc-test-reporter
-    - name: Generate Project # swift build doesn't report coverage in a format CC understands, so we generage a project and build with xcode.
-      run: swift package generate-xcodeproj --enable-code-coverage
-    - name: Test Reporter Before 
-      run: ./cc-test-reporter before-build
-    - name: Build Tests
-      run: xcodebuild test -scheme SessionArtist-Package -resultBundleVersion 3 -resultBundlePath ./build.xcresult
+        mkdir -p ${{ steps.shared.outputs.ccDirectory }}
+        curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-${{ steps.shared.outputs.ccVersion }}-darwin-amd64 > ${{ steps.shared.outputs.ccPath }}
+        chmod +x ${{ steps.shared.outputs.ccPath }}
+
+    - name: Cache Build
+      uses: actions/cache@v1
+      with:
+        path: ${{ steps.shared.outputs.buildCachePath }}
+        key: xcodebuild-${{ runner.OS }}-swift${{ steps.shared.outputs.swiftVersion }}-deps${{ hashFiles('Package.resolved') }}-source${{ hashFiles('Sources/**/*.swift') }}
+        restore-keys: |
+          xcodebuild-${{ runner.OS }}-swift${{ steps.shared.outputs.swiftVersion }}-deps${{ hashFiles('Package.resolved') }}-
+          xcodebuild-${{ runner.OS }}-swift${{ steps.shared.outputs.swiftVersion }}-
+          xcodebuild-${{ runner.OS }}-
+
+    - name: Test Reporter Before
+      run: ${{ steps.shared.outputs.ccPath }} before-build
+
+    - name: Build and Test
+      run: xcodebuild test -scheme ${{ steps.shared.outputs.project }} -enableCodeCoverage YES -resultBundlePath ${{ steps.shared.outputs.resultPath }} -derivedDataPath ${{ steps.shared.outputs.buildCachePath }}
+
     - name: Parse Coverage
-      run: xcrun xccov view --report --json --files-for-target SessionArtist.framework ./build.xcresult > coverage.json
-    - name: Test Reporter After
-      run: ./cc-test-reporter after-build -t xccov -r ${{ secrets.CODECLIMATE_TOKEN }}
+      uses: jemmons/GenerateXCCovJSONAction@v1
+      with:
+        resultfile: ${{ steps.shared.outputs.resultPath }}
+        outputpath: coverage.json
+        targets: ${{ steps.shared.outputs.project }}
+
+    - name: Test Reporter Format and Upload
+      run: ${{ steps.shared.outputs.ccPath }} after-build -t xccov -r ${{ secrets.CODECLIMATE_TOKEN }}
       env:
         GIT_COMMIT_SHA: ${{github.sha}}
         GIT_BRANCH: master
+    
