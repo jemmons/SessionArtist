@@ -45,7 +45,7 @@ private extension GetTests {
       }
       
       fakeHost.get(path, query: query, headers: headers).data { res in
-        if case .success(.ok, _, _) = res {
+        if case .success((.ok, _, _)) = res {
           expectedResponse.fulfill()
         }
       }

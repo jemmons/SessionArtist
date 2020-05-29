@@ -118,7 +118,7 @@ private extension RequestTests {
       }
       
       fakeHost.request(endpoint).data { res in
-        if case .success(.ok, _, _) = res {
+        if case .success((.ok, _, _)) = res {
           expectedResponse.fulfill()
         }
       }

@@ -2,7 +2,6 @@ import Foundation
 import XCTest
 import SessionArtist
 import Perfidy
-import Medea
 
 
 
@@ -48,7 +47,7 @@ private extension PostTests {
       
       let validJSON = try! ValidJSONObject(json)
       fakeHost.post(path, json: validJSON, headers: headers).data { res in
-        if case .success(.ok, _, _) = res {
+        if case .success((.ok, _, _)) = res {
           expectedResponse.fulfill()
         }
       }

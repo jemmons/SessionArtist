@@ -1,5 +1,4 @@
 import Foundation
-import Medea
 
 
 
@@ -33,14 +32,14 @@ public enum Params {
       var comp = URLComponents()
       comp.queryItems = qs
       guard let query = comp.query else {
-        fatalError("“queryItems” somehow wasn't set.")
+        preconditionFailure("“queryItems” somehow wasn’t set.")
       }
-      guard let data = query.data(using: .utf8, allowLossyConversion: true) else {
-        fatalError("encoding can't fail if lossy is true.")
-      }
-      return data
+      return Data(query.utf8)
     case .json(let j):
-      return JSONHelper.data(from: j)
+      guard let jsonData = try? JSONSerialization.data(withJSONObject: j.value, options: []) else {
+        preconditionFailure("ValidJSONObject wasn’t valid.")
+      }
+      return jsonData
     }
   }
   
@@ -67,21 +66,21 @@ private enum Helper {
   
   /**
    Generalized version to allow for recursion.
-   - throws: `JSONError.unexpectedType` if not called (initially) on a JSONObject.
+   - throws: `notJSONObject` if not called (initially) on a JSONObject.
    */
   private static func makeQuery(from jsonValue: Any, prefix: String? = nil) throws -> [URLQueryItem] {
     var items: [URLQueryItem] = []
     
     switch jsonValue {
-    case let object as [String: Any]:
+    case let object as JSONObject:
       try object.forEach { key, value in
         let nextPrefix = prefix?.appending("[\(key)]") ?? key
         items.append(contentsOf: try makeQuery(from: value, prefix: nextPrefix))
       }
       
-    case let array as [Any]:
+    case let array as JSONArray:
       guard let somePrefix = prefix else {
-        throw(Medea.JSONError.unexpectedType)
+        throw Error.notJSONObject
       }
       try array.forEach { element in
         items.append(contentsOf: try makeQuery(from: element, prefix: somePrefix + "[]"))
@@ -89,7 +88,7 @@ private enum Helper {
       
     default:
       guard let somePrefix = prefix else {
-        throw(Medea.JSONError.unexpectedType)
+        throw Error.notJSONObject
       }
       items.append(URLQueryItem(name: somePrefix, value: String(describing: jsonValue)))
     }
