@@ -70,7 +70,7 @@ private extension Endpoint {
   
   func url(from baseURL: URL) -> URL {
     guard var comps = URLComponents(url: baseURL, resolvingAgainstBaseURL: false) else {
-      fatalError("Problem resolving against base URL")
+      preconditionFailure("Problem resolving against base URL")
     }
     
     comps.appendPathComponent(path)
@@ -80,7 +80,7 @@ private extension Endpoint {
     }
     
     guard let url = comps.url else {
-      fatalError("Problem with leading “/” in path.")
+      preconditionFailure("Problem with leading “/” in path.")
     }
     
     return url

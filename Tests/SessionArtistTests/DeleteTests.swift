@@ -2,7 +2,6 @@ import Foundation
 import XCTest
 import SessionArtist
 import Perfidy
-import Medea
 
 
 
@@ -21,7 +20,7 @@ class DeleteTests: XCTestCase {
       }
       
       fakeHost.delete("/test").data { res in
-        if case .success(.ok, _, _) = res {
+        if case .success((.ok, _, _)) = res {
           expectedResponse.fulfill()
         }
       }
@@ -42,7 +41,7 @@ class DeleteTests: XCTestCase {
       }
       
       fakeHost.delete("/test", headers: [.accept: "foobar"]).data { res in
-        if case .success(.ok, _, _) = res {
+        if case .success((.ok, _, _)) = res {
           expectedResponse.fulfill()
         }
       }

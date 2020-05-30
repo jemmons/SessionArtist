@@ -17,32 +17,12 @@ class ResponseTests: XCTestCase {
       server.add("/test", response: ["foo": "bar"])
       
       fakeHost.request(endpoint).data { res in
-        guard case let .success(status, contentType, data) = res else {
+        guard case let .success((status, contentType, data)) = res else {
           fatalError("not a success")
         }
         XCTAssertEqual(status, .ok)
         XCTAssertEqual(contentType, "application/json")
         XCTAssertEqual(String(data: data, encoding: .utf8), "{\"foo\":\"bar\"}")
-        expectedResponse.fulfill()
-      }
-      
-      wait(for: [expectedResponse], timeout: 1)
-    }
-  }
-  
-  
-  func testAnyJSON() {
-    let expectedResponse = expectation(description: "waiting for response")
-    
-    FakeServer.runWith { server in
-      server.add("/test", response: ["foo": "bar"])
-      
-      fakeHost.request(endpoint).json { res in
-        guard case let .success(status, .object(json)) = res else {
-          fatalError("not a success")
-        }
-        XCTAssertEqual(status, .ok)
-        XCTAssertEqual(json as! [String: String], ["foo": "bar"])
         expectedResponse.fulfill()
       }
       
@@ -58,7 +38,7 @@ class ResponseTests: XCTestCase {
       server.add("/test", response: ["foo": "bar"])
       
       fakeHost.request(endpoint).jsonObject { res in
-        guard case let .success(status, json) = res else {
+        guard case let .success((status, json)) = res else {
           fatalError("not a success")
         }
         XCTAssertEqual(status, .ok)
@@ -96,7 +76,7 @@ class ResponseTests: XCTestCase {
       server.add("/test", response: try! Response(jsonArray:["foo", "bar"]))
       
       fakeHost.request(endpoint).jsonArray { res in
-        guard case let .success(status, json) = res else {
+        guard case let .success((status, json)) = res else {
           fatalError("not a success")
         }
         XCTAssertEqual(status, .ok)
