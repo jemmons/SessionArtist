@@ -2,7 +2,7 @@ import Foundation
 
 
 
-public struct Host {
+public class Host {
   private let baseURL: URL
   private let session: URLSession
   
