@@ -79,6 +79,46 @@ public extension Host {
     let endpoint = Endpoint(method: .delete, path: path, params: nil, headers: headers)
     return request(endpoint)
   }
+  
+  
+  /**
+   A GraphQL query that sends response `Data` to a completion handler.
+   
+   This works a little differently from other verbs. Rather than taking a method, path, and headers, it relies on the default URL and headers of the host. This is because GraphQL requests are always POSTs, and always address the same endpoint. Easier to set it once (in host init), then forget it.
+   
+   And because GraphQL responses can only have one format (JSON), this provides a callback with `Data` ready for decoding rather than returning a `Request`.
+   */
+  func query(_ query: String, completion: @escaping (Result<(HTTPStatusCode, Data), Swift.Error>) -> Void) {
+    post("", params: Params([URLQueryItem(name: "query", value: query)]))
+      .data { res in
+        completion(res.flatMap { code, _, data in return .success((code, data)) })
+    }
+  }
+
+  
+  /**
+   A GraphQL query that decodes response and sends it to a completion handler.
+   
+   This works a little differently from other verbs. Rather than taking a method, path, and headers, it relies on the default URL and headers of the host. This is because GraphQL requests are always POSTs, and always address the same endpoint. Easier to set it once (in host init), then forget it.
+   
+   And because GraphQL responses can only have one format (JSON), this provides a callback with a decoded model rather than returning a `Request`.
+   */
+  func query<Model>(_ query: String, model: Model.Type, completion: @escaping (Result<Model, Swift.Error>) -> Void) where Model: Decodable {
+    self.query(query) { res in
+      completion(res.flatMap { code, data in
+        switch code {
+        case .ok:
+          do {
+            return .success(try JSONDecoder().decode(Model.self, from: data))
+          } catch {
+            return .failure(error)
+          }
+        case let code:
+          return .failure(Error.notOK(code))
+        }
+      })
+    }
+  }
 }
 
 

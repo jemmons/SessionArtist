@@ -31,7 +31,7 @@ public enum Params {
     case .form(let qs):
       var comp = URLComponents()
       comp.queryItems = qs
-      guard let query = comp.query else {
+      guard let query = comp.url?.query else {
         preconditionFailure("“queryItems” somehow wasn’t set.")
       }
       return Data(query.utf8)

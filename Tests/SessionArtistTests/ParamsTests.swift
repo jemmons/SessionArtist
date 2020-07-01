@@ -16,9 +16,21 @@ class ParamsTests: XCTestCase {
       URLQueryItem(name: "baz", value: nil)
       ])
     
-    XCTAssertEqual(subject.makeData(), "foo=bar&baz".data(using: .utf8))
+    XCTAssertEqual(String(data: subject.makeData(), encoding: .utf8), "foo=bar&baz")
     
     XCTAssertEqual(subject.contentType, [HTTPHeaderField.contentType: "application/x-www-form-urlencoded"])
+  }
+
+  
+  func testFormURLEncoding() {
+    let subject = Params.form([
+      URLQueryItem(name: "space", value: "f o o"),
+      URLQueryItem(name: "and", value: "f&o"),
+      // Should question mark be allowed? It’s technically a delimiter, but *between* the URL and the query string. It ought to be able to appear *in* the query just fine. And, of course, wouldn't cause any ambiguity in an `x-www-form-urlencoded` body... so I’m defering to `URLComponents`’s experience in these matters.
+      URLQueryItem(name: "unescaped", value: "-._~?"),
+      ])
+        
+    XCTAssertEqual(String(data: subject.makeData(), encoding: .utf8), "space=f%20o%20o&and=f%26o&unescaped=-._~?")
   }
   
   

@@ -24,6 +24,13 @@ class GetTests: XCTestCase {
   }
   
   
+  func testGetEncodedParams() {
+    doFakeGet("/test", query: [URLQueryItem(name: "f o o", value: "b&r")], headers: [:]) { req in
+      XCTAssertEqual(req.url!.query, "f%20o%20o=b%26r")
+    }
+  }
+  
+  
   func testGetHeaders() {
     doFakeGet("/test", query: [], headers: [.accept: "foobar"]) { req in
       XCTAssertEqual(req.allHTTPHeaderFields!["Accept"], "foobar")
