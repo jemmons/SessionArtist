@@ -3,10 +3,10 @@ import Foundation
 
 
 public class Request {
-  public typealias DataCompletionHandler = (Result<(code: HTTPStatusCode, contentType: String?, body: Data), Swift.Error>) -> Void
-  public typealias JSONObjectCompletionHandler = (Result<(code: HTTPStatusCode, json: JSONObject), Swift.Error>) -> Void
-  public typealias JSONArrayCompletionHandler = (Result<(code: HTTPStatusCode, json: JSONArray), Swift.Error>) -> Void
-  public typealias TextCompletionHandler = (Result<(code: HTTPStatusCode, text: String), Swift.Error>) -> Void
+  public typealias DataCompletionHandler = (Result<(code: HTTPStatusCode, contentType: String?, body: Data), Error>) -> Void
+  public typealias JSONObjectCompletionHandler = (Result<(code: HTTPStatusCode, json: JSONObject), Error>) -> Void
+  public typealias JSONArrayCompletionHandler = (Result<(code: HTTPStatusCode, json: JSONArray), Error>) -> Void
+  public typealias TextCompletionHandler = (Result<(code: HTTPStatusCode, text: String), Error>) -> Void
 
   
   private let session: URLSession
@@ -47,7 +47,7 @@ public extension Request {
   func jsonObject(_ completion: @escaping JSONObjectCompletionHandler) -> URLSessionTask {
     return data(Helper.dataHandler(from: completion) {
       guard let jsonObject = try JSONSerialization.jsonObject(with: $0, options: []) as? JSONObject else {
-        throw Error.notJSONObject
+        throw APIError.notJSONObject
       }
       return jsonObject
     })
@@ -58,7 +58,7 @@ public extension Request {
   func jsonArray(_ completion: @escaping JSONArrayCompletionHandler) -> URLSessionTask {
     return data(Helper.dataHandler(from: completion) {
       guard let jsonArray = try JSONSerialization.jsonObject(with: $0, options: []) as? JSONArray else {
-        throw Error.notJSONArray
+        throw APIError.notJSONArray
       }
       return jsonArray
     })
@@ -76,11 +76,11 @@ private extension Request {
         
       case let (d?, r?, _):
         guard let httpResponse = r as? HTTPURLResponse else {
-          completion(.failure(Error.notHTTP))
+          completion(.failure(APIError.notHTTP))
           return
         }
         guard let code = HTTPStatusCode(rawValue: httpResponse.statusCode) else {
-          completion(.failure(Error.unknownStatusCode(httpResponse.statusCode)))
+          completion(.failure(APIError.unknownStatusCode(httpResponse.statusCode)))
           return
         }
         completion(.success((code: code, contentType: Helper.contentType(from: httpResponse.allHeaderFields), body: d)))
@@ -108,9 +108,9 @@ private enum Helper {
   }
 
 
-  static func dataHandler<T>(from handler: @escaping (Result<(code: HTTPStatusCode, json: T), Swift.Error>) -> Void, factory: @escaping (Data) throws -> T) -> Request.DataCompletionHandler {
-    return { (res: Result<(code: HTTPStatusCode, contentType: String?, body: Data), Swift.Error>) -> Void in
-      let jsonResult = res.flatMap { code, _, body -> Result<(code: HTTPStatusCode, json: T), Swift.Error> in
+  static func dataHandler<T>(from handler: @escaping (Result<(code: HTTPStatusCode, json: T), Error>) -> Void, factory: @escaping (Data) throws -> T) -> Request.DataCompletionHandler {
+    return { (res: Result<(code: HTTPStatusCode, contentType: String?, body: Data), Error>) -> Void in
+      let jsonResult = res.flatMap { code, _, body -> Result<(code: HTTPStatusCode, json: T), Error> in
         do {
           return .success((code: code, json: try factory(body)))
         } catch {

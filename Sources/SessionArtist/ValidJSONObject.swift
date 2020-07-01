@@ -8,7 +8,7 @@ public struct ValidJSONObject {
   
   public init(_ jsonObject: JSONObject) throws {
     guard JSONSerialization.isValidJSONObject(jsonObject) else {
-      throw Error.invalidJSONObject
+      throw APIError.invalidJSONObject
     }
     value = jsonObject
   }

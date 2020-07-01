@@ -2,7 +2,7 @@ import Foundation
 
 
 
-public enum Error: LocalizedError {
+public enum APIError: LocalizedError {
   case notHTTP, unknownStatusCode(Int), notJSONObject, notJSONArray, invalidJSONObject
   
   
