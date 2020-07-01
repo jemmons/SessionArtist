@@ -22,15 +22,5 @@ jobs:
       id: shared
       uses: jemmons/SharedValuesAction@v1
 
-    - name: Cache Build
-      uses: actions/cache@v1
-      with:
-        path: ${{ steps.shared.outputs.buildCachePath }}
-        key: xcodebuild-${{ runner.OS }}-swift${{ steps.shared.outputs.swiftVersion }}-deps${{ hashFiles('Package.resolved') }}-source${{ hashFiles('Sources/**/*.swift') }}
-        restore-keys: |
-          xcodebuild-${{ runner.OS }}-swift${{ steps.shared.outputs.swiftVersion }}-deps${{ hashFiles('Package.resolved') }}-
-          xcodebuild-${{ runner.OS }}-swift${{ steps.shared.outputs.swiftVersion }}-
-          xcodebuild-${{ runner.OS }}-
-
     - name: Build and Test
-      run: xcodebuild test -scheme ${{ steps.shared.outputs.project }} -enableCodeCoverage YES -resultBundlePath ${{ steps.shared.outputs.resultPath }} -derivedDataPath ${{ steps.shared.outputs.buildCachePath }}
+      run: xcodebuild test -scheme ${{ steps.shared.outputs.project }} -enableCodeCoverage YES -resultBundlePath ${{ steps.shared.outputs.resultPath }}

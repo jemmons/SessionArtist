@@ -35,21 +35,11 @@ jobs:
         curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-${{ steps.shared.outputs.ccVersion }}-darwin-amd64 > ${{ steps.shared.outputs.ccPath }}
         chmod +x ${{ steps.shared.outputs.ccPath }}
 
-    - name: Cache Build
-      uses: actions/cache@v1
-      with:
-        path: ${{ steps.shared.outputs.buildCachePath }}
-        key: xcodebuild-${{ runner.OS }}-swift${{ steps.shared.outputs.swiftVersion }}-deps${{ hashFiles('Package.resolved') }}-source${{ hashFiles('Sources/**/*.swift') }}
-        restore-keys: |
-          xcodebuild-${{ runner.OS }}-swift${{ steps.shared.outputs.swiftVersion }}-deps${{ hashFiles('Package.resolved') }}-
-          xcodebuild-${{ runner.OS }}-swift${{ steps.shared.outputs.swiftVersion }}-
-          xcodebuild-${{ runner.OS }}-
-
     - name: Test Reporter Before
       run: ${{ steps.shared.outputs.ccPath }} before-build
 
     - name: Build and Test
-      run: xcodebuild test -scheme ${{ steps.shared.outputs.project }} -enableCodeCoverage YES -resultBundlePath ${{ steps.shared.outputs.resultPath }} -derivedDataPath ${{ steps.shared.outputs.buildCachePath }}
+      run: xcodebuild test -scheme ${{ steps.shared.outputs.project }} -enableCodeCoverage YES -resultBundlePath ${{ steps.shared.outputs.resultPath }} 
 
     - name: Parse Coverage
       uses: jemmons/GenerateXCCovJSONAction@v1
