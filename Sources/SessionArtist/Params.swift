@@ -80,7 +80,7 @@ private enum Helper {
       
     case let array as JSONArray:
       guard let somePrefix = prefix else {
-        throw Error.notJSONObject
+        throw APIError.notJSONObject
       }
       try array.forEach { element in
         items.append(contentsOf: try makeQuery(from: element, prefix: somePrefix + "[]"))
@@ -88,7 +88,7 @@ private enum Helper {
       
     default:
       guard let somePrefix = prefix else {
-        throw Error.notJSONObject
+        throw APIError.notJSONObject
       }
       items.append(URLQueryItem(name: somePrefix, value: String(describing: jsonValue)))
     }
