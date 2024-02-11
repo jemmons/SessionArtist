@@ -41,6 +41,11 @@ public extension Request {
   func data(_ completion: @escaping DataCompletionHandler) -> URLSessionTask {
     return makeTask(completion: completion)
   }
+   
+  
+  func data() async throws -> (code: HTTPStatusCode, contentType: String?, body: Data) {
+    try await withCheckedThrowingContinuation { data($0.resume) }
+  }
     
     
   @discardableResult
@@ -52,6 +57,11 @@ public extension Request {
       return jsonObject
     })
   }
+  
+  
+  func jsonObject() async throws -> (code: HTTPStatusCode, json: JSONObject) {
+    try await withCheckedThrowingContinuation { jsonObject($0.resume) }
+  }
 
 
   @discardableResult
@@ -62,6 +72,11 @@ public extension Request {
       }
       return jsonArray
     })
+  }
+  
+  
+  func jsonArray() async throws -> (code: HTTPStatusCode, json: JSONArray) {
+    try await withCheckedThrowingContinuation { jsonArray($0.resume) }
   }
 }
 

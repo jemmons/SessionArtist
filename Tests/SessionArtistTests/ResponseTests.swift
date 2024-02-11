@@ -31,6 +31,16 @@ class ResponseTests: XCTestCase {
   }
   
   
+  func testAsyncData() async throws {
+    let server = try FakeServer()
+    defer { server.stop() }
+    server.add("/test", response: ["foo": "bar"])
+    
+    let (status, contentType, data) = try await fakeHost.request(endpoint).data()
+    XCTAssertEqual(status, .ok)
+    XCTAssertEqual(contentType, "application/json")
+    XCTAssertEqual(String(data: data, encoding: .utf8), "{\"foo\":\"bar\"}")
+  }
   
   
   func testJSONObject() throws {
@@ -53,6 +63,15 @@ class ResponseTests: XCTestCase {
   }
   
   
+  func testAsyncJSONObject() async throws {
+    let server = try FakeServer()
+    defer { server.stop() }
+    server.add("/test", response: ["foo": "bar"])
+    
+    let (status, json) = try await fakeHost.request(endpoint).jsonObject()
+    XCTAssertEqual(status, .ok)
+    XCTAssertEqual(json as! [String: String], ["foo": "bar"])
+  }
   
   
   func testJSONObjectFailure() throws {
@@ -73,6 +92,32 @@ class ResponseTests: XCTestCase {
   }
   
   
+  func testAsyncJSONObjectFailure() async throws {
+    let server = try FakeServer()
+    defer { server.stop() }
+    server.add("/array", response: "[]")
+    server.add("/not-json", response: "not-json")
+    let arrayEndpoint = Endpoint(method: .get, path: "/array")
+    let notJSONEndpoint = Endpoint(method: .get, path: "/not-json")
+    
+    do {
+      _ = try await fakeHost.request(arrayEndpoint).jsonObject()
+      XCTFail("Should have thrown")
+    } catch APIError.notJSONObject {
+      XCTAssert(true)
+    } catch {
+      XCTFail("Should have throw specific error.")
+    }
+    
+    do {
+      _ = try await fakeHost.request(notJSONEndpoint).jsonObject()
+      XCTFail("Should have thrown")
+    } catch CocoaError.propertyListReadCorrupt {
+      XCTAssert(true)
+    } catch {
+      XCTFail("Should have throw specific error.")
+    }
+  }
   
   
   func testJSONArray() throws {
@@ -95,6 +140,15 @@ class ResponseTests: XCTestCase {
   }
   
   
+  func testAsyncJSONArray() async throws {
+    let server = try FakeServer()
+    defer { server.stop() }
+    server.add("/test", response: try! Response(jsonArray:["foo", "bar"]))
+    
+    let (status, json) = try await fakeHost.request(endpoint).jsonArray()
+    XCTAssertEqual(status, .ok)
+    XCTAssertEqual(json as! [String], ["foo", "bar"])
+  }
   
   
   func testJSONArrayFailure() throws {
@@ -115,4 +169,30 @@ class ResponseTests: XCTestCase {
   }
   
   
+  func testAsyncJSONArrayFailure() async throws {
+    let server = try FakeServer()
+    defer { server.stop() }
+    server.add("/object", response: "{}")
+    server.add("/not-json", response: "not-json")
+    let objectEndpoint = Endpoint(method: .get, path: "/object")
+    let notJSONEndpoint = Endpoint(method: .get, path: "/not-json")
+    
+    do {
+      _ = try await fakeHost.request(objectEndpoint).jsonArray()
+      XCTFail("Should have thrown")
+    } catch APIError.notJSONArray {
+      XCTAssert(true)
+    } catch {
+      XCTFail("Should have throw specific error.")
+    }
+    
+    do {
+      _ = try await fakeHost.request(notJSONEndpoint).jsonObject()
+      XCTFail("Should have thrown")
+    } catch CocoaError.propertyListReadCorrupt {
+      XCTAssert(true)
+    } catch {
+      XCTFail("Should have throw specific error.")
+    }
+  }
 }
