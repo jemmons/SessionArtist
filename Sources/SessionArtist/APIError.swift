@@ -3,7 +3,7 @@ import Foundation
 
 
 public enum APIError: LocalizedError {
-  case notHTTP, unknownStatusCode(Int), notJSONObject, notJSONArray, invalidJSONObject
+  case notHTTP, unknownStatusCode(Int), notJSONObject, notJSONArray, invalidJSONObject, exceptionalStatusCode(HTTPStatusCode)
   
   
   public var errorDescription: String? {
@@ -18,7 +18,8 @@ public enum APIError: LocalizedError {
       return "Expected an array, but got some other JSON type."
     case .invalidJSONObject:
       return "The given object is not valid JSON."
-
+    case .exceptionalStatusCode(let code):
+      return "Service responded with “\(code)”."
     }
   }
   
@@ -29,6 +30,8 @@ public enum APIError: LocalizedError {
       return "HTTP Error"
     case .notJSONObject, .notJSONArray, .invalidJSONObject:
       return "JSON Error"
+    case .exceptionalStatusCode:
+      return "Service Error"
     }
   }
 }
